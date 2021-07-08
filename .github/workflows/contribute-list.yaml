@@ -8,7 +8,7 @@ on:
 #    “At 00:00 on Monday.”
 #    - cron: '0 0 * * 1'
 #    “At every 5th minute” for testing
-    - cron: '5/0 * * * *'
+    - cron: '0/5 * * * *'
 
 jobs:
   contrib-readme-job:
