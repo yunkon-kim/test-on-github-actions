@@ -1,9 +1,13 @@
 # test-on-github-actions
 
+## Collaborators
+
+<!-- readme: collaborators -start -->
+<!-- readme: collaborators -end -->
 
 ## Contributors
 
-<!-- readme: collaborators,contributors -start -->
+<!-- readme: contributors -start -->
 <table>
 <tr>
     <td align="center">
@@ -14,7 +18,7 @@
         </a>
     </td></tr>
 </table>
-<!-- readme: collaborators,contributors -end -->
+<!-- readme: contributors -end -->
 
 ## Bots
 
