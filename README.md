@@ -11,6 +11,13 @@
             <br />
             <sub><b>Yunkon (Alvin) Kim </b></sub>
         </a>
+    </td>
+    <td align="center">
+        <a href="https://github.com/jihoon-seo">
+            <img src="https://avatars.githubusercontent.com/u/46767780?v=4" width="100;" alt="jihoon-seo"/>
+            <br />
+            <sub><b>Jihoon Seo</b></sub>
+        </a>
     </td></tr>
 </table>
 <!-- readme: collaborators -end -->
