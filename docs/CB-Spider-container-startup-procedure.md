@@ -9,8 +9,9 @@ sudo rm -rf /tmp/meta_db/*
 
 # 2. CB-Spider image 다운로드
 ```
-sudo docker pull cloudbaristaorg/cb-spider:v0.2.0-20200821
+sudo docker pull cloudbaristaorg/cb-spider:v0.4.0
 ```
+[참고] [CB-Spider 컨테이너 이미지 태그 목록](https://hub.docker.com/r/cloudbaristaorg/cb-spider/tags?page=1&ordering=last_updated)
 
 # 3. 기존 CB-Spider container 정지 및 삭제
 ```
@@ -22,9 +23,9 @@ sudo docker stop cb-spider
 
 # 4. CB-Spider 컨테이너 구동
 ```
-sudo docker run --rm -p 1024:1024 -p 2048:2048  -v /tmp/meta_db:/root/go/src/github.com/cloud-barista/cb-spider/meta_db --name cb-spider cloudbaristaorg/cb-spider:v0.2.0-20200821
+sudo docker run --rm -p 1024:1024 -p 2048:2048  -v /tmp/meta_db:/root/go/src/github.com/cloud-barista/cb-spider/meta_db --name cb-spider cloudbaristaorg/cb-spider:v0.4.0
 ```
-`-v` 옵션 설명은 [<ins>여기</ins>](https://github.com/cb-contributhon/cb-coffeehouse/wiki/Docker-commands#use-volumes)참고
+`-v` 옵션 설명은 [<ins>여기</ins>](https://github.com/cb-contributhon/cb-coffeehouse/wiki/Docker-commands#use-volumes) 참고
 
 ---
 # * Reference
