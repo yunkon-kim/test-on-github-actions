@@ -1,10 +1,13 @@
 name: Update contributor list on README.md
 
-on: [push, pull_request]
-#  schedule:
-    # * is a special character in YAML so you have to quote this string
-    # “At 00:00 on Monday.”
+on:
+#  push:
+#  pull_request:
+  schedule:
+#    * is a special character in YAML so you have to quote this string
+#    “At 00:00 on Monday.”
 #    - cron: '0 0 * * 1'
+    - cron: '5 * * * *'
 
 jobs:
   contrib-readme-job:
