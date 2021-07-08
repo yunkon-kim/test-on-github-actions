@@ -52,4 +52,4 @@ jobs:
 #          gitAuthorName: ${{ env.GIT_AUTHOR_NAME }}
 #          gitAuthorEmail: ${{ env.GIT_AUTHOR_EMAIL }}
           branch: ${{ env.default_branch }}
-          commitMessage: Sync ${{ env.WIKI }} to ${{ env.DOCS }} [skip actions]
+          commitMessage: Auto sync ${{ env.WIKI }} to ${{ env.DOCS }} [skip actions]
