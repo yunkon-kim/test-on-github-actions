@@ -1,5 +1,7 @@
 # test-on-github-actions
 
+Hello GitHub Actions!
+
 ## Collaborators
 
 <!-- readme: collaborators -start -->
