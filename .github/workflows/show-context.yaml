@@ -14,6 +14,7 @@ jobs:
         run: |
           echo "ParsedBranch: ${GITHUB_REF#refs/heads/}"
           echo "github: ${{ github }}"
+          echo "toJSON(github): ${{ toJSON(github) }}"
           echo "github.action: ${{ github.action }}"
           echo "github.action_path: ${{ github.action_path }}"
           echo "github.actor: ${{ github.actor }}"
@@ -32,3 +33,4 @@ jobs:
           echo "github.token: ${{ github.token }}"
           echo "github.workflow: ${{ github.workflow }}"
           echo "github.workspace: ${{ github.workspace }}"
+          
