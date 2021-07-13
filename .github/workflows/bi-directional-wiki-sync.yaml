@@ -38,13 +38,17 @@ jobs:
   job-sync-wiki-to-docs:
     runs-on: ubuntu-latest
     # I have to check '[skip actions]' here because it is NOT supported for the `gollum` event.
-    if: github.event_name == 'gollum' && !contains(${{ env.WIKI_COMMIT_MESSAGE }}, '[skip actions]')
+    if: github.event_name == 'gollum' # && !contains(${{ env.WIKI_COMMIT_MESSAGE }}, '[skip actions]')
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2
         with:
           token: ${{ secrets.NEWRELIC_BOT_TOKEN }}
           ref: ${{ env.default_branch }}
+      - uses: actions/github-script@v4
+        with:
+          script: |
+            console.log('context:', context)
       - name: Sync Wiki to Docs
         uses: newrelic/wiki-sync-action@master
         with:
