@@ -53,9 +53,9 @@ jobs:
             console.log('core:', core)
             console.log('glob:', glob)
             console.log('io:', io)
-            console.log('context.context.payload.repository.owner', context.context.payload.repository.owner)
-            result = await github.rest.git.getCommit({
-              context.context.payload.repository.owner.login,
+            console.log('context.payload.repository.owner', context.payload.repository.owner)
+            result = await github.git.getCommit({
+              context.payload.repository.owner.login,
               context.payload.repository.name,
               context.sha,
             })
