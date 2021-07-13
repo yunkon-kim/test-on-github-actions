@@ -3,9 +3,14 @@
 Test
 
 
-## Collaborators and contributors
+## Collaborators
 
-<!-- readme: collaborators,contributors -start -->
+<!-- readme: collaborators -start -->
+<!-- readme: collaborators -end -->
+
+## Contributors
+
+<!-- readme: contributors -start -->
 <table>
 <tr>
     <td align="center">
@@ -23,7 +28,7 @@ Test
         </a>
     </td></tr>
 </table>
-<!-- readme: collaborators,contributors -end -->
+<!-- readme: contributors -end -->
 
 ## Bots
 
