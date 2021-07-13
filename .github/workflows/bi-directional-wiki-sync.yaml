@@ -58,9 +58,9 @@ jobs:
             console.log('context.payload.repository.name', context.payload.repository.name)
             console.log('context.sha', context.sha)
             result = github.git.getCommit({
-              context.payload.repository.owner.login,
-              context.payload.repository.name,
-              context.sha,
+              owner: context.payload.repository.owner.login,
+              repo: context.payload.repository.name,
+              commit_sha: context.sha,
             })
             console.log('result:', result)
       - name: Sync Wiki to Docs
