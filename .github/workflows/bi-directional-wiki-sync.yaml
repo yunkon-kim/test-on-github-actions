@@ -45,23 +45,6 @@ jobs:
         with:
           token: ${{ secrets.NEWRELIC_BOT_TOKEN }}
           ref: ${{ env.default_branch }}
-      - uses: actions/github-script@v4
-        with:
-          script: |
-            // console.log('github:', github)
-            console.log('context:', context)
-            console.log('core:', core)
-            console.log('glob:', glob)
-            console.log('io:', io)
-            console.log('context.payload.repository.owner', context.payload.repository.owner)
-            console.log('context.payload.repository.owner.login', context.payload.repository.owner.login)
-            console.log('context.payload.repository.name', context.payload.repository.name)
-            console.log('context.sha', context.sha)
-              owner: context.payload.repository.owner.login,
-              repo: context.payload.repository.name,
-              commit_sha: context.sha,
-            })
-            console.log('result:', result)
       - name: Sync Wiki to Docs
         uses: newrelic/wiki-sync-action@master
         with:
@@ -72,6 +55,26 @@ jobs:
 #          gitAuthorEmail: ${{ env.GIT_AUTHOR_EMAIL }}
           branch: ${{ env.default_branch }}
           commitMessage: Auto sync ${{ env.WIKI }} to ${{ env.DOCS }} [skip actions]
+
+# Getting a commit message of wiki may not be supported yet.
+#       - name: Get a commit message of wiki
+#         uses: actions/github-script@v4
+#         with:
+#           script: |
+#             // console.log('github:', github)
+#             console.log('context:', context)
+#             console.log('core:', core)
+#             console.log('glob:', glob)
+#             console.log('io:', io)
+#             console.log('context.payload.repository.owner', context.payload.repository.owner)
+#             console.log('context.payload.repository.owner.login', context.payload.repository.owner.login)
+#             console.log('context.payload.repository.name', context.payload.repository.name)
+#             console.log('context.sha', context.sha)
+#               owner: context.payload.repository.owner.login,
+#               repo: context.payload.repository.name,
+#               commit_sha: context.sha,
+#             })
+#             console.log('result:', result)
 
 #   show-all-github-context:
 #     runs-on: ubuntu-latest
