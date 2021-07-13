@@ -46,6 +46,12 @@ jobs:
           echo "github.token: ${{ github.token }}"
           echo "github.workflow: ${{ github.workflow }}"
           echo "github.workspace: ${{ github.workspace }}"
+  show-all-env:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Show all environmental variables
+        run: |
+          '${{ toJSON(env) }}'
           
   job-sync-docs-to-wiki:
     runs-on: ubuntu-latest
