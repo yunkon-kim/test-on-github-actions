@@ -38,7 +38,7 @@ jobs:
   job-sync-wiki-to-docs:
     runs-on: ubuntu-latest
     # I have to check '[skip actions]' here because it is NOT supported for the `gollum` event.
-    if: github.event_name == 'gollum' && !contains(github.event.head_commit.message, '[skip actions]')
+    if: github.event_name == 'gollum' && !contains(${{ env.WIKI_COMMIT_MESSAGE }}, '[skip actions]')
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2
