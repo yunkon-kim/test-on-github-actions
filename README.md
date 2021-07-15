@@ -26,7 +26,7 @@ Test
         <a href="https://github.com/jaeyoung0826">
             <img src="https://avatars.githubusercontent.com/u/63827432?v=4" width="100;" alt="jaeyoung0826"/>
             <br />
-            <sub><b>jaeyoung0826</b></sub>
+            <sub><b>Jaeyoung0826</b></sub>
         </a>
     </td></tr>
 </table>
@@ -62,7 +62,7 @@ Test
         <a href="https://github.com/jaeyoung0826">
             <img src="https://avatars.githubusercontent.com/u/63827432?v=4" width="100;" alt="jaeyoung0826"/>
             <br />
-            <sub><b>jaeyoung0826</b></sub>
+            <sub><b>Jaeyoung0826</b></sub>
         </a>
     </td>
     <td align="center">
