@@ -2,10 +2,10 @@ name: Test on event and branch
 on: 
   push:
     branches-ignore:
-      - $default-branch
+      - main
   pull_request:
     branches-ignore:
-      - $default-branch
+      - main
     
 jobs:
   Explore-GitHub-Actions:
