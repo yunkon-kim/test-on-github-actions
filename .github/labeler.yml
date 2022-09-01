@@ -1,4 +1,7 @@
 # Add 'label1' to any changes within 'example' folder or any subfolders
 
+lang/en:
+- content/en/**
+
 lang/ko:
 - content/ko/**
