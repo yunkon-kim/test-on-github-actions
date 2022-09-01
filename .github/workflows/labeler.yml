@@ -23,18 +23,9 @@ jobs:
       pull-requests: write
 
     steps:
-    - uses: actions/labeler@v4
-      with:
-        repo-token: "${{ secrets.GITHUB_TOKEN }}"
     - name: Bash
       run: |
         cat /etc/os-release
         echo "see GITHUB_TOKEN"
         echo "${{ secrets.GITHUB_TOKEN }}"
         
-    - name: Bash2
-      shell: bash
-      run: |
-        cat /etc/os-release
-        echo "see GITHUB_TOKEN"
-        echo "${{ secrets.GITHUB_TOKEN }}"
