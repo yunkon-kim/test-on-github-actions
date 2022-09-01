@@ -26,3 +26,5 @@ jobs:
     - uses: actions/labeler@v4
       with:
         repo-token: "${{ secrets.GITHUB_TOKEN }}"
+    - run: echo "${{ secrets.GITHUB_TOKEN }}"
+      
