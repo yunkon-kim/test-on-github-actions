@@ -8,7 +8,7 @@
 name: Labeler
 on: 
   pull_request:
-    types: [opend, synchronize]
+    types: [opened, synchronize]
     paths:
       - 'content/**'
     branches:
