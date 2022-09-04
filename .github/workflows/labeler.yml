@@ -9,8 +9,6 @@ name: Labeler
 on: 
   pull_request_target:
     types: [opened, synchronize]
-    paths:
-      - 'content/**'
     branches:
       - 'dev-**'
 
@@ -32,9 +30,3 @@ jobs:
         echo "see GITHUB_TOKEN"
         echo "${{ secrets.GITHUB_TOKEN }}"
         
-    - name: Bash2
-      shell: bash
-      run: |
-        cat /etc/os-release
-        echo "see GITHUB_TOKEN"
-        echo "${{ secrets.GITHUB_TOKEN }}"
