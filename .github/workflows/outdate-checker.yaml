@@ -28,11 +28,9 @@ jobs:
     - name: Get list of localized terms
       shell: bash
       run: |
-        xxx
-        xxx
-        xxx
+        echo "this will show a list"
               
     - name: Check outdated
       run: |
-        git diff 
+        git diff dev-ko {{github.ref}}        
         
