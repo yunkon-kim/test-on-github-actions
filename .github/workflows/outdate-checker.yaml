@@ -21,6 +21,11 @@ jobs:
     steps:
     - name: Checkout 
       uses: actions/checkout@v3
+    
+    - name: Extract branch name
+      shell: bash
+      run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+      id: extract_branch
       
 #     - name: Checkout ${{ matrix.branch }} (base branch)
 #       uses: actions/checkout@v3
@@ -33,6 +38,7 @@ jobs:
         ls -al
         git status
         git branch        
+        echo "GITHUB_REF: $GITHUB_REF}
         echo "github.ref: ${{github.ref}}"
         echo "github.head_ref: ${{github.head_ref}}"
         echo "github.base_ref: ${{github.base_ref}}"
@@ -45,4 +51,4 @@ jobs:
               
     - name: Check outdated
       run: |
-        git diff origin/${{ matrix.branch }}...${{github.head_ref}}
+        git diff ${{ steps.extract_branch.outputs.branch }} origin/${{ matrix.branch }}
