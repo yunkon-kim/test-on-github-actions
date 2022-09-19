@@ -1,0 +1,38 @@
+# This workflow will check if terms are outdated or not.
+
+name: Outdated checker
+on: 
+  pull_request:
+#     paths:
+#       - 'content/**'
+#     branches:
+#       - 'dev-**'
+
+jobs:
+  check-outdated:
+    runs-on: ubuntu-latest
+#     permissions:
+#       contents: read
+#       pull-requests: write
+
+    steps:
+    - name: Checkout source code
+      uses: actions/checkout@v3
+      
+    - name: Check Git status
+      shell: bash
+      run: |
+        ls -al
+        git status
+      
+    - name: Get list of localized terms
+      shell: bash
+      run: |
+        xxx
+        xxx
+        xxx
+              
+    - name: Check outdated
+      run: |
+        git diff 
+        
