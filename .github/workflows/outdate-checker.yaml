@@ -24,6 +24,8 @@ jobs:
       run: |
         ls -al
         git status
+        git branch
+        git checkout -b upstream/dev-ko
       
     - name: Get list of localized terms
       shell: bash
@@ -32,5 +34,5 @@ jobs:
               
     - name: Check outdated
       run: |
-        git diff dev-ko {{github.ref}}        
+        git diff dev-ko ${{github.ref}}        
         
