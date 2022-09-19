@@ -51,4 +51,4 @@ jobs:
               
     - name: Check outdated
       run: |
-        git diff ${{ steps.extract_branch.outputs.branch }} origin/${{ matrix.branch }}
+        git diff ...origin/${{ matrix.branch }}
