@@ -10,22 +10,28 @@ on:
 
 jobs:
   check-outdated:
+    strategy:
+      matrix:
+        branch: [ dev-ko ] # other branches and be added.
     runs-on: ubuntu-latest
 #     permissions:
 #       contents: read
 #       pull-requests: write
 
     steps:
-    - name: Checkout source code
+    - name: Checkout 
       uses: actions/checkout@v3
+      
+    - name: Checkout ${{ matrix.branch }} (base branch)
+      uses: actions/checkout@v3
+      with:
+        ref: ${{ matrix.branch }}
       
     - name: Check Git status
       shell: bash
       run: |
         ls -al
         git status
-        git branch
-        git checkout upstream/dev-ko -b dev-ko
         git branch
       
     - name: Get list of localized terms
@@ -35,4 +41,4 @@ jobs:
               
     - name: Check outdated
       run: |
-        git diff dev-ko ${{github.ref}}
+        git diff ${{ matrix.branch }} ${{github.ref}}
