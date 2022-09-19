@@ -32,13 +32,17 @@ jobs:
       run: |
         ls -al
         git status
-        git branch
+        git branch        
+        echo "github.ref: ${{github.ref}}"
+        echo "github.head_ref: ${{github.head_ref}}"
+        echo "github.base_ref: ${{github.base_ref}}"
       
     - name: Get list of localized terms
       shell: bash
       run: |
         echo "this will show a list"
+        
               
     - name: Check outdated
       run: |
-        git diff origin/${{ matrix.branch }}...${{github.head.ref}}
+        git diff origin/${{ matrix.branch }}...${{github.head_ref}}
