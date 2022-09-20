@@ -22,38 +22,40 @@ jobs:
     - name: Checkout 
       uses: actions/checkout@v3
       with:
-        fetch-depth: 0
-      
-    
+        fetch-depth: 0 # fetch all history for all tags and branches
+        
 #     - name: Extract branch name
 #       shell: bash
 #       run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/})"
 #       id: extract_branch
       
-#     - name: Checkout ${{ matrix.branch }} (base branch)
-#       uses: actions/checkout@v3
-#       with:
-#         ref: ${{ matrix.branch }}
+#     - name: Check something
+#       shell: bash
+#       run: |
+#         ls -al
+#         git status
+#         git branch 
+#
+#         # Default environment variables 
+#         echo "GITHUB_REF: $GITHUB_REF"
+#         echo "Extract branch: ${GITHUB_REF#refs/}"
+#
+#         # `github` context information
+#         echo "github.ref: ${{github.ref}}"
+#         echo "github.head_ref: ${{github.head_ref}}"
+#         echo "github.base_ref: ${{github.base_ref}}"
       
-    - name: Check Git status
-      shell: bash
-      run: |
-        ls -al
-        git status
-        git branch        
-        echo "GITHUB_REF: $GITHUB_REF"
-        echo "github.ref: ${{github.ref}}"
-        echo "github.head_ref: ${{github.head_ref}}"
-        echo "github.base_ref: ${{github.base_ref}}"
-      
-    - name: Get list of localized terms
-      shell: bash
-      run: |
-        echo "this will show a list"
+#     - name: Get list of localized terms
+#       shell: bash
+#       run: |
+#         echo "this will show a list"
         
               
     - name: Check outdated
-      run: |        
+      run: |
+        # Extract a branch from GITHUB_REF        
         EXTRACT_BRANCH=${GITHUB_REF#refs/}
         echo "${EXTRACT_BRANCH}"
+        
+        # Compare changes by git diff
         git diff ${EXTRACT_BRANCHE}..origin/${{ matrix.branch }}
