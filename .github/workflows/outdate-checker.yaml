@@ -1,5 +1,5 @@
-# This workflow will check if terms are outdated or not.
-
+# This workflow will check if localized terms are outdated or not
+# by comparing English terms in the old branch and the latest branch.
 name: Outdated checker
 on: 
   pull_request:
@@ -12,17 +12,18 @@ jobs:
   check-outdated:
     name: Check-outdated    
     
-    # Condition: it's the upstream repository && target branch is localization branch (dev-xx)
+    # Condition to run this this workflow on the upstream repository
 #     if: github.repository == 'cncf/glossary'
-    if: ${{ contains('dev-ko', github.base_ref) }}
+
+    # Condition to update the old dev-xx from the latest dev-xx or main
+    # NOTE - "github.base_ref" refers to the old upstream/dev-xx
+    # NOTE - "github.head_ref" refers to the latest forked/dev-xx or the latest upstream/main
+    if: ${{ contains('dev-ko main', github.head_ref) }}
     
     runs-on: ubuntu-latest
-#     permissions:
-#       contents: read
-#       pull-requests: write
     
     env:
-      L10N_DIR: ./content/ko # Hmm.. I have no idea to cover pt-br and zh-cn yet..
+      L10N_DIR: ./content/ko # Hmm.. I have no idea to gracefully handle pt-br and zh-cn yet ^^;;
     
     steps:
     - name: Checkout 
