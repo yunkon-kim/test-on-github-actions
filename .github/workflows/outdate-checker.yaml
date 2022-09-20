@@ -55,5 +55,5 @@ jobs:
     - name: Check outdated
       run: |        
         EXTRACT_BRANCH=${GITHUB_REF#refs/}
-        echo EXTRACT_BRANCH
+        echo "${EXTRACT_BRANCH}"
         git diff ${EXTRACT_BRANCHE}..origin/${{ matrix.branch }}
