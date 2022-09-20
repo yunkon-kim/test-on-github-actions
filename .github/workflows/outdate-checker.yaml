@@ -21,6 +21,8 @@ jobs:
     steps:
     - name: Checkout 
       uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
     
     - name: Extract branch name
       shell: bash
@@ -52,4 +54,4 @@ jobs:
     - name: Check outdated
       run: |
         git fetch
-        git diff ..origin/${{ matrix.branch }}
+        git diff HEAD..origin/${{ matrix.branch }}
