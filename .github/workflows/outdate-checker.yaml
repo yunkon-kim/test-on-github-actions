@@ -3,59 +3,61 @@
 name: Outdated checker
 on: 
   pull_request:
-#     paths:
-#       - 'content/**'
-#     branches:
-#       - 'dev-**'
+    paths:
+      - 'content/**'
+    branches:
+      - 'dev-ko' # add other branche or use wildcard 'dev-**'
 
 jobs:
   check-outdated:
-    strategy:
-      matrix:
-        branch: [ dev-ko ] # other branches and be added.
+    name: Check-outdated    
+    
+    # Condition: it's the upstream repository && target branch is localization branch (dev-xx)
+#     if: github.repository == 'cncf/glossary'
+    if: ${{ contains('dev-ko', github.base_ref) }}
+    
     runs-on: ubuntu-latest
 #     permissions:
 #       contents: read
 #       pull-requests: write
-
+    
+    env:
+      L10N_DIR: ./content/ko # Hmm.. I have no idea to cover pt-br and zh-cn yet..
+    
     steps:
     - name: Checkout 
       uses: actions/checkout@v3
       with:
         fetch-depth: 0 # fetch all history for all tags and branches
         
-#     - name: Extract branch name
-#       shell: bash
-#       run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/})"
-#       id: extract_branch
-      
-#     - name: Check something
-#       shell: bash
-#       run: |
-#         ls -al
-#         git status
-#         git branch 
-#
-#         # Default environment variables 
-#         echo "GITHUB_REF: $GITHUB_REF"
-#         echo "Extract branch: ${GITHUB_REF#refs/}"
-#
-#         # `github` context information
-#         echo "github.ref: ${{github.ref}}"
-#         echo "github.head_ref: ${{github.head_ref}}"
-#         echo "github.base_ref: ${{github.base_ref}}"
-      
-#     - name: Get list of localized terms
-#       shell: bash
-#       run: |
-#         echo "this will show a list"
-        
-              
     - name: Check outdated
+      shell: bash
       run: |
-        # Extract a branch from GITHUB_REF        
-        EXTRACT_BRANCH=${GITHUB_REF#refs/}
-        echo "${EXTRACT_BRANCH}"
+        # (DEBUG) ###########################################
+        ls -al
+        git status
+        git branch
         
-        # Compare changes by git diff
-        git diff ${EXTRACT_BRANCHE}..origin/${{ matrix.branch }}
+        # Default environment variables 
+        echo "GITHUB_REF: $GITHUB_REF"
+        echo "Extract branch: ${GITHUB_REF#refs/}"
+        
+        # `github` context information
+        echo "(DEBUG) github.ref: ${{github.ref}}"
+        echo "(DEBUG) github.head_ref: ${{github.head_ref}}"
+        echo "(DEBUG) github.base_ref: ${{github.base_ref}}"
+        #####################################################
+        
+        # Extract the lastest branch from GITHUB_REF
+        LATEST_BRANCH=${GITHUB_REF#refs/}
+        echo "(DUBUG) LATEST_BRANCH: ${LATEST_BRANCH}"
+                
+        # Check outdated only if there is a localized term
+        # Loop files in a localization directory, thus ${L10N_DIR} can be ./content/ko
+        for FILE in $(find ${L10N_DIR} -name '*.md'); do
+            echo "(DEBUG) Localized file path: $FILE"
+            echo "(DUBUG) Original file path: content/en${FILE#./content/ko}"
+            
+            # Actually compare English terms by replacing path by "./content/en${FILE#${L10N_DIR}}" (like from 'ko' to 'en')
+            git diff --name-only ${LATEST_BRANCH}..origin/${{github.base_ref}} -- ./content/en${FILE#${L10N_DIR}}
+        done 
