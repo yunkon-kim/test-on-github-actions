@@ -2,7 +2,7 @@ name: Port outdated checking result
 
 on:
   workflow_run:
-    workflows: [Outdated checker]
+    workflows: ["Outdated checker"]
     types:
       - completed           
       
@@ -15,10 +15,16 @@ jobs:
 #       pull-requests: write      
 
     steps:
-    - name: Download an outdated checking result
+    - name: Checkout 
+      uses: actions/checkout@v3
+      
+    - name: Download result
       uses: actions/download-artifact@v3
       with:
         name: dev-ko-outdated-checking-result
+        
+    - name: Display structure of downloaded files
+      run: ls -R
         
     - name: Generate a result markdown
       shell: bash
