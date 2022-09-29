@@ -1,10 +1,10 @@
+name: Port outdated checking result
+
 on:
   workflow_run:
     workflows: [Outdated checker]
     types:
-      - completed
-      
-      
+      - completed           
       
 jobs:
   post-result:
@@ -15,20 +15,22 @@ jobs:
 #       pull-requests: write      
 
     steps:
-    - name: Download a single artifact
+    - name: Download an outdated checking result
       uses: actions/download-artifact@v3
       with:
-        name: dev-ko-oudated-checking-result
+        name: dev-ko-outdated-checking-result
         
-    - name: Generate markdown
+    - name: Generate a result markdown
       shell: bash
       run: |
         VALUE=`cat outdated-file-list.txt`
-
+        
         # Create checking_result.md
         cat > output.md <<EOF      
         ### Outdated files
-        ${value}
+        
+        ${VALUE}
+        
         EOF
         
     - name: Create an issue from file    
