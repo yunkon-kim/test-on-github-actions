@@ -30,12 +30,12 @@ jobs:
         workflow_conclusion: success
         
     - name: Display structure of downloaded files
-      run: ls -R
+      run: tree
         
     - name: Generate a result markdown
       shell: bash
       run: |
-        VALUE=`cat outdated-file-list.txt`
+        VALUE=`cat ./dev-ko-outdated-checking-result/outdated-file-list.txt`
         
         # Create checking_result.md
         cat > output.md <<EOF      
