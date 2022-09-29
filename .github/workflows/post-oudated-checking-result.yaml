@@ -20,8 +20,6 @@ jobs:
       
     - name: Download result
       uses: actions/download-artifact@v3
-      with:
-        name: dev-ko-outdated-checking-result
         
     - name: Display structure of downloaded files
       run: ls -R
