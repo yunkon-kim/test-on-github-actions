@@ -15,11 +15,19 @@ jobs:
 #       pull-requests: write      
 
     steps:
-    - name: Checkout 
-      uses: actions/checkout@v3
-      
+#     - name: Checkout 
+#       uses: actions/checkout@v3
+
+# Important! "actions/download-artifact" is not working for sharing data between workflows. 
+#     - name: Download result
+#       uses: actions/download-artifact@v3
+
     - name: Download result
-      uses: actions/download-artifact@v3
+      uses: dawidd6/action-download-artifact@v2
+      with:
+        github_token: ${{secrets.GITHUB_TOKEN}}
+        workflow: outdated-checker.yaml
+        workflow_conclusion: success
         
     - name: Display structure of downloaded files
       run: ls -R
