@@ -74,12 +74,11 @@ jobs:
                 
         echo ::set-output name=output_path::"./outdated-file-list.txt"
         
-    - name: Upload artifact
+    - name: Upload result
       uses: actions/upload-artifact@v3
       with:
-        name: dev-ko-oudated-checking-result
+        name: dev-ko-outdated-checking-result
         path: outdated-file-list.txt
-        retention-days: 5
 
 #     - name: Create an issue from file    
 #       uses: peter-evans/create-issue-from-file@v4
