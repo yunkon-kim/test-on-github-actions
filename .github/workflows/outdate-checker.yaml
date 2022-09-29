@@ -21,6 +21,8 @@ jobs:
     if: ${{ contains('dev-ko main', github.head_ref) }}
     
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
     
     env:
       L10N_DIR: ./content/ko # Hmm.. I have no idea to gracefully handle pt-br and zh-cn yet ^^;;
@@ -79,6 +81,6 @@ jobs:
       uses: peter-evans/create-issue-from-file@v4
       with:
         title: An example issue
-        content-filepath: ./checking_result.md
+        content-filepath:  ${{ steps.checker.outputs.output_path }}
         labels: |
           test
