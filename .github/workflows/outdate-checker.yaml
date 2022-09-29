@@ -54,7 +54,7 @@ jobs:
         echo "(DUBUG) LATEST_BRANCH: ${LATEST_BRANCH}"
         
         # Create checking_result.md
-        cat <<EOF | sudo tee -a ./checking_result.md
+        cat <<EOF | tee -a ./checking_result.md
         ### Outdated files        
         
         EOF
