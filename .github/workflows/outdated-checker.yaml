@@ -86,4 +86,4 @@ jobs:
 #         title: An example issue
 #         content-filepath:  ${{ steps.checker.outputs.output_path }}
 #         labels: |
-#           test
+#           outdated
