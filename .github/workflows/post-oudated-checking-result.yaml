@@ -1,0 +1,39 @@
+on:
+  workflow_run:
+    workflows: [Outdated checker]
+    types:
+      - completed
+      
+      
+      
+jobs:
+  post-result:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write 
+#       pull-requests: write      
+
+    steps:
+    - name: Download a single artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: dev-ko-oudated-checking-result
+        
+    - shell: bash
+        run: |
+          value=`cat outdated-file-list.text`
+          
+          # Create checking_result.md
+          cat > output.md <<EOF      
+          ### Outdated files
+          ${value}
+          EOF
+        
+    - name: Create an issue from file    
+      uses: peter-evans/create-issue-from-file@v4
+      with:
+        title: An example issue
+        content-filepath: output.md
+        labels: |
+          test
