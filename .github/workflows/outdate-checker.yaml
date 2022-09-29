@@ -52,6 +52,12 @@ jobs:
         # Extract the lastest branch from GITHUB_REF
         LATEST_BRANCH=${GITHUB_REF#refs/}
         echo "(DUBUG) LATEST_BRANCH: ${LATEST_BRANCH}"
+        
+        # Create checking_result.md
+        cat <<EOF | sudo tee -a ./checking_result.md
+        ### Outdated files        
+        
+        EOF
                 
         # Check outdated only if there is a localized term
         # Loop files in a localization directory, thus ${L10N_DIR} can be ./content/ko
@@ -60,5 +66,13 @@ jobs:
             echo "(DUBUG) Original file path: content/en${FILE#./content/ko}"
             
             # Actually compare English terms by replacing path by "./content/en${FILE#${L10N_DIR}}" (like from 'ko' to 'en')
-            git diff --name-only ${LATEST_BRANCH}..origin/${{github.base_ref}} -- ./content/en${FILE#${L10N_DIR}}
+            git diff --name-only ${LATEST_BRANCH}..origin/${{github.base_ref}} -- ./content/en${FILE#${L10N_DIR}} >> checking_result.md
         done 
+
+    - name: Create an issue from file    
+      uses: peter-evans/create-issue-from-file@v4
+      with:
+        title: An example issue
+        content-filepath: ./checking_result.md
+        labels: |
+          test
