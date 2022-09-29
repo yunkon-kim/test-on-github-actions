@@ -87,3 +87,4 @@ jobs:
 #         content-filepath:  ${{ steps.checker.outputs.output_path }}
 #         labels: |
 #           outdated
+#           lang/ko
