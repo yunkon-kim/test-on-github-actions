@@ -51,4 +51,5 @@ jobs:
         title: An example issue
         content-filepath: output.md
         labels: |
-          test
+          outdated
+          lang/ko
