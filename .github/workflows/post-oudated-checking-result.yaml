@@ -1,4 +1,4 @@
-name: Port outdated checking result
+name: Post outdated checkering result
 
 on:
   workflow_run:
@@ -15,13 +15,10 @@ jobs:
 #       pull-requests: write      
 
     steps:
-#     - name: Checkout 
-#       uses: actions/checkout@v3
 
-# Important! "actions/download-artifact" is not working for sharing data between workflows. 
+#     NOTE - "actions/download-artifact" is not working for sharing data between workflows. 
 #     - name: Download result
 #       uses: actions/download-artifact@v3
-
     - name: Download result
       uses: dawidd6/action-download-artifact@v2
       with:
@@ -35,7 +32,7 @@ jobs:
     - name: Generate a result markdown
       shell: bash
       run: |
-        VALUE=`cat ./dev-ko-outdated-checking-result/outdated-file-list.txt`
+        VALUE=$(find ./dev-ko-outdated-checking-result/)
         
         # Create checking_result.md
         cat > output.md <<EOF      
