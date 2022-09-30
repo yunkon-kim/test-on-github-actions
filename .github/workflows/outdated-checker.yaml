@@ -25,7 +25,7 @@ jobs:
 #       issues: write
     
     env:
-      L10N_DIR: ./content/ko # Hmm.. I have no idea to gracefully handle pt-br and zh-cn yet ^^;;
+      L10N_DIR: ./content/ko/ # Hmm.. I have no idea to gracefully handle pt-br and zh-cn yet ^^;;
     
     steps:
     - name: Checkout 
@@ -52,33 +52,39 @@ jobs:
         echo "(DEBUG) github.base_ref: ${{github.base_ref}}"
         #####################################################
         
-        # Extract the lastest branch from GITHUB_REF
+        # Set the lastest branch name from 'GITHUB_REF' 
+        # The latest branch can be 'upstream/main' or 'forked/dev-ko' (reabsed)
         LATEST_BRANCH=${GITHUB_REF#refs/}
         echo "(DUBUG) LATEST_BRANCH: ${LATEST_BRANCH}"
         
-        # Create outdated-file-list.txt
-        touch outdated-file-list.txt
+        # Set the old branch from 'github.base_ref' 
+        # The old branch can be 'upstream/dev-ko'
+        OLD_BRANCH="origin/${{github.base_ref}}"
+        echo "(DUBUG) OLD_BRANCH: ${OLD_BRANCH}"
+        
+        # Make an output directory
+        mkdir outdated
                 
         # Check outdated only if there is a localized term
-        # Loop files in a localization directory, thus ${L10N_DIR} can be ./content/ko
+        # Loop files in a localization directory, thus ${L10N_DIR} can be ./content/ko/
         for FILE in $(find ${L10N_DIR} -name '*.md'); do
+            # ${MYVAR#pattern}: delete shortest match of pattern from the beginning
+            FILE_NAME="${FILE#${L10N_DIR}}" 
+            echo "(DEBUG) FILE_NAME: ${FILE_NAME}"
             echo "(DEBUG) Localized file path: $FILE"
-            echo "(DUBUG) Original file path: ./content/en${FILE#./content/ko}"
+            echo "(DEBUG) Original file path: ./content/en/${FILE_NAME}"            
             
-            # Actually compare English terms by replacing path by "./content/en${FILE#${L10N_DIR}}" (like from 'ko' to 'en')
-            git diff --name-only ${LATEST_BRANCH}..origin/${{github.base_ref}} -- ./content/en${FILE#${L10N_DIR}} >> outdated-file-list.txt
+            # Actually compare English terms and log diff in the file
+            git diff ${LATEST_BRANCH}..${OLD_BRANCH} -- ./content/en/${FILE_NAME} > ./outdated/${FILE_NAME}
         done 
         
-        ls -al
-        cat outdated-file-list.txt    
-                
-        echo ::set-output name=output_path::"./outdated-file-list.txt"
+        ls -al ./outdated              
         
     - name: Upload result
       uses: actions/upload-artifact@v3
       with:
         name: dev-ko-outdated-checking-result
-        path: outdated-file-list.txt
+        path: ./outdated/
 
 #     - name: Create an issue from file    
 #       uses: peter-evans/create-issue-from-file@v4
