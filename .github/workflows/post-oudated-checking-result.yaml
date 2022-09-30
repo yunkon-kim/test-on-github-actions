@@ -48,7 +48,9 @@ jobs:
         echo "${FILE_LIST[0]}" >> output.md
         
         echo "Content:   " >> output.md        
+        echo "```diff" >> output.md 
         cat ${FILE_LIST[0]} >> output.md      
+        echo "```" >> output.md 
         
         echo "end of md"  >> output.md              
         
