@@ -75,7 +75,7 @@ jobs:
             echo "(DEBUG) Original file path: ./content/en/${FILE_NAME}"            
             
             # Actually compare English terms and log diff in the file
-            git diff ${LATEST_BRANCH}..${OLD_BRANCH} -- ./content/en/${FILE_NAME} > ./outdated/${FILE_NAME}
+            git diff ${OLD_BRANCH}..${LATEST_BRANCH} -- ./content/en/${FILE_NAME} > ./outdated/${FILE_NAME}
         done 
         
         ls -al ./outdated              
