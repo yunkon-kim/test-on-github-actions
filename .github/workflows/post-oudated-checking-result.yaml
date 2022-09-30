@@ -32,7 +32,7 @@ jobs:
     - name: Generate a result markdown
       shell: bash
       run: |
-        FILE_LIST=$(find ./dev-ko-outdated-checking-result/)
+        FILE_LIST=$(find ./dev-ko-outdated-checking-result/ -name '*.md')
         VALUE=$(cat ${FILE_LIST[0]})
         
         # Create checking_result.md
