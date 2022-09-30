@@ -37,13 +37,15 @@ jobs:
         
         # Create checking_result.md
         cat > output.md <<EOF      
-        ### Outdated files
-        
+        ### Outdated files        
         ${FILE_LIST}
         
-        ```diff
-        ${VALUE}
-        ```
+        ### Outdated content                
+        Filename:   
+        ${FILE_LIST[0]}
+        
+        Content:   
+        ${VALUE}        
         
         EOF
         
