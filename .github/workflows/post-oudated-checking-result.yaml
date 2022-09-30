@@ -35,7 +35,7 @@ jobs:
     - name: Generate a result markdown
       shell: bash
       run: |
-        FILE_LIST=$(find ${ARTIFACT_DIR) -name '*.md')
+        FILE_LIST=$(find ${ARTIFACT_DIR} -name '*.md')
         
         # Create checking_result.md
         touch output.md
