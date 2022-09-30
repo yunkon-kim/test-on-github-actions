@@ -32,13 +32,18 @@ jobs:
     - name: Generate a result markdown
       shell: bash
       run: |
-        VALUE=$(find ./dev-ko-outdated-checking-result/)
+        FILE_LIST=$(find ./dev-ko-outdated-checking-result/)
+        VALUE=$(cat ${FILE_LIST[0]})
         
         # Create checking_result.md
         cat > output.md <<EOF      
         ### Outdated files
         
+        ${FILE_LIST}
+        
+        ```diff
         ${VALUE}
+        ```
         
         EOF
         
