@@ -43,7 +43,7 @@ jobs:
         # Generate markdown
         echo "### Outdated files" >> output.md
         
-        for FILE in FILE_LIST; do 
+        for FILE in ${FILE_LIST}; do 
           FILE_NAME="${FILE#${ARTIFACT_DIR}}" 
           echo "- ${FILE_NAME}" >> output.md
         done 
@@ -52,7 +52,7 @@ jobs:
         
         echo "### More details" >> output.md
         
-        for FILE in FILE_LIST; do 
+        for FILE in ${FILE_LIST}; do 
           FILE_NAME="${FILE#${ARTIFACT_DIR}}" 
         
           echo "File: ${FILE_NAME}" >> output.md
