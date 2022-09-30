@@ -36,18 +36,21 @@ jobs:
         VALUE=$(cat ${FILE_LIST[0]})
         
         # Create checking_result.md
-        cat > output.md <<EOF      
-        ### Outdated files        
-        ${FILE_LIST}
+        touch output.md
         
-        ### Outdated content                
-        Filename:   
-        ${FILE_LIST[0]}
+        # Generate markdown
+        echo "### Outdated files" >> output.md
+        echo "${FILE_LIST}" >> output.md
+        echo "" >> output.md
         
-        Content:   
-        ${VALUE}        
+        echo "### Outdated content" >> output.md
+        echo "Filename:   " >> output.md
+        echo "${FILE_LIST[0]}" >> output.md
         
-        EOF
+        echo "Content:   " >> output.md        
+        cat ${FILE_LIST[0]} >> output.md      
+        
+        echo "end of md"  >> output.md              
         
     - name: Create an issue from file    
       uses: peter-evans/create-issue-from-file@v4
