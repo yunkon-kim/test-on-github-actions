@@ -14,6 +14,9 @@ jobs:
       issues: write 
 #       pull-requests: write      
 
+    env:
+      ARTIFACT_DIR: ./dev-ko-outdated-checking-result/ # It will be updated.
+
     steps:
 
 #     NOTE - "actions/download-artifact" is not working for sharing data between workflows. 
@@ -32,33 +35,42 @@ jobs:
     - name: Generate a result markdown
       shell: bash
       run: |
-        FILE_LIST=$(find ./dev-ko-outdated-checking-result/ -name '*.md')
-        VALUE=$(cat ${FILE_LIST[0]})
+        FILE_LIST=$(find ${ARTIFACT_DIR) -name '*.md')
         
         # Create checking_result.md
         touch output.md
         
         # Generate markdown
         echo "### Outdated files" >> output.md
-        echo "${FILE_LIST}" >> output.md
+        
+        for FILE in FILE_LIST; do 
+          FILE_NAME="${FILE#${ARTIFACT_DIR}}" 
+          echo "- ${FILE_NAME}" >> output.md
+        done 
+        
         echo "" >> output.md
         
-        echo "### Outdated content" >> output.md
-        echo "Filename:   " >> output.md
-        echo "${FILE_LIST[0]}" >> output.md
+        echo "### More details" >> output.md
         
-        echo "Content:   " >> output.md        
-        echo "\`\`\`diff" >> output.md 
-        cat ${FILE_LIST[0]} >> output.md      
-        echo "\`\`\`" >> output.md 
+        for FILE in FILE_LIST; do 
+          FILE_NAME="${FILE#${ARTIFACT_DIR}}" 
         
-        echo "end of md"  >> output.md              
+          echo "File: ${FILE_NAME}" >> output.md
+          echo "" >> output.md
+          echo "\`\`\`diff" >> output.md 
+          cat ${FILE} >> output.md      
+          echo "\`\`\`" >> output.md 
+          
+        done 
+        
+        echo "The end of report"  >> output.md              
         
     - name: Create an issue from file    
       uses: peter-evans/create-issue-from-file@v4
       with:
-        title: An example issue
+        title: "[ko] A report to track update"
         content-filepath: output.md
         labels: |
           outdated
+          good first issue
           lang/ko
