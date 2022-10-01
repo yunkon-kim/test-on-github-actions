@@ -10,23 +10,9 @@ test
 <tr>
     <td align="center">
         <a href="https://github.com/hermitkim1">
-            <img src="https://avatars.githubusercontent.com/u/7975459?v=4" width="100;" alt="hermitkim1"/>
+            <img src="https://avatars.githubusercontent.com/u/109802617?v=4" width="100;" alt="hermitkim1"/>
             <br />
             <sub><b>Yunkon (Alvin) Kim </b></sub>
-        </a>
-    </td>
-    <td align="center">
-        <a href="https://github.com/jihoon-seo">
-            <img src="https://avatars.githubusercontent.com/u/46767780?v=4" width="100;" alt="jihoon-seo"/>
-            <br />
-            <sub><b>Jihoon Seo</b></sub>
-        </a>
-    </td>
-    <td align="center">
-        <a href="https://github.com/jaeyoung0826">
-            <img src="https://avatars.githubusercontent.com/u/63827432?v=4" width="100;" alt="jaeyoung0826"/>
-            <br />
-            <sub><b>Jaeyoung0826</b></sub>
         </a>
     </td></tr>
 </table>
@@ -39,9 +25,16 @@ test
 <tr>
     <td align="center">
         <a href="https://github.com/hermitkim1">
-            <img src="https://avatars.githubusercontent.com/u/7975459?v=4" width="100;" alt="hermitkim1"/>
+            <img src="https://avatars.githubusercontent.com/u/109802617?v=4" width="100;" alt="hermitkim1"/>
             <br />
             <sub><b>Yunkon (Alvin) Kim </b></sub>
+        </a>
+    </td>
+    <td align="center">
+        <a href="https://github.com/yunkon-kim">
+            <img src="https://avatars.githubusercontent.com/u/7975459?v=4" width="100;" alt="yunkon-kim"/>
+            <br />
+            <sub><b>Yunkon Kim </b></sub>
         </a>
     </td>
     <td align="center">
