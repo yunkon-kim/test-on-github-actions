@@ -24,9 +24,6 @@ jobs:
 #     permissions:
 #       issues: write
 
-    env:
-      L10N_DIR: ""
-
     steps:
     - name: Set L10N directory
       shell: bash
@@ -45,6 +42,9 @@ jobs:
         esac
         
         echo "(DEBUG) Directory: ${L10N_DIR}"
+        
+        # Set an environment variable 
+        echo "L10N_DIR=${L10N_DIR}" >> $GITHUB_ENV
     
     - name: Checkout 
       uses: actions/checkout@v3
@@ -69,6 +69,7 @@ jobs:
         echo "(DEBUG) github.head_ref: ${{github.head_ref}}"
         echo "(DEBUG) github.base_ref: ${{github.base_ref}}"
         echo "(DEBUG) L10N_DIR: ${L10N_DIR}"
+        echo "(DEBUG) L10N_DIR: ${{ env.L10N_DIR }}"
         #####################################################
         
         # Set the lastest branch name from 'GITHUB_REF' 
