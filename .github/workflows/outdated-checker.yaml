@@ -4,7 +4,7 @@ name: Outdated checker
 on: 
   pull_request:
     paths:
-      - 'content/**'
+      - 'content/en/**.md'
     branches:
       - 'dev-ko' # add other branche or use wildcard 'dev-**'
 
@@ -12,22 +12,35 @@ jobs:
   check-outdated:
     name: Check-outdated    
     
-    # Condition to run this this workflow on the upstream repository
-#     if: github.repository == 'cncf/glossary'
+    # Condition to run this workflow on the upstream repository
+    #if: github.repository == 'cncf/glossary'
 
     # Condition to update the old dev-xx from the latest dev-xx or main
-    # NOTE - "github.base_ref" refers to the old upstream/dev-xx
-    # NOTE - "github.head_ref" refers to the latest forked/dev-xx or the latest upstream/main
-    if: ${{ contains('dev-ko main', github.head_ref) }}
+    # NOTE - In this workflow, "github.base_ref" refers to the old upstream/dev-xx.
+    # NOTE - In this workflow, "github.head_ref" refers to the latest forked/dev-xx or the latest upstream/main.
+    #if: ${{ contains('dev-ko main', github.head_ref) }}
     
     runs-on: ubuntu-latest
 #     permissions:
 #       issues: write
-    
-    env:
-      L10N_DIR: ./content/ko/ # Hmm.. I have no idea to gracefully handle pt-br and zh-cn yet ^^;;
-    
+
     steps:
+    - name: Set L10N directory
+      shell: bash
+      run: |
+        L10N_BRANCH=${{github.base_ref}}
+        case 
+        ${L10N_BRANCH}
+        in
+          dev-ko)
+          L10N_DIR="./content/ko/"
+          ;;
+          
+          #dev-ko)
+          #L10N_DIR="./content/ko/"
+          #;;          
+        esac
+    
     - name: Checkout 
       uses: actions/checkout@v3
       with:
@@ -66,19 +79,20 @@ jobs:
         mkdir outdated
                 
         # Check outdated only if there is a localized term
-        # Loop files in a localization directory, thus ${L10N_DIR} can be ./content/ko/
-        for FILE in $(find ${L10N_DIR} -name '*.md'); do
+        # Loop files in a localization directory, which is ${L10N_DIR} (e.g., ./content/ko/)
+        for FILE_PATH in $(find ${L10N_DIR} -name '*.md'); do
             # ${MYVAR#pattern}: delete shortest match of pattern from the beginning
-            FILE_NAME="${FILE#${L10N_DIR}}" 
+            FILE_NAME="${FILE_PATH#${L10N_DIR}}" 
             echo "(DEBUG) FILE_NAME: ${FILE_NAME}"
-            echo "(DEBUG) Localized file path: $FILE"
-            echo "(DEBUG) Original file path: ./content/en/${FILE_NAME}"            
+            echo "(DEBUG) Localized file path: $FILE_PATH"
+            echo "(DEBUG) Original file path: ./content/en/${FILE_NAME}"
             
-            # Actually compare English terms and log diff in the file
+            # Actually compare between the old and lastest English terms and log diff in the file
             git diff ${OLD_BRANCH}..${LATEST_BRANCH} -- ./content/en/${FILE_NAME} > ./outdated/${FILE_NAME}
         done 
         
-        ls -al ./outdated              
+        echo "(DEBUG) The outdated files"
+        ls -al ./outdated
         
     - name: Upload result
       uses: actions/upload-artifact@v3
