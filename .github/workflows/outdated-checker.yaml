@@ -29,7 +29,7 @@ jobs:
       shell: bash
       run: |
         L10N_BRANCH="${{github.base_ref}}"
-        echo "(DEBUG) Branch: ${L10N_BRANCH}"
+        echo "(DEBUG) L10N Branch: ${L10N_BRANCH}"
         
         case "${L10N_BRANCH}" in
           dev-ko)          
@@ -41,9 +41,10 @@ jobs:
           #;;
         esac
         
-        echo "(DEBUG) Directory: ${L10N_DIR}"
+        echo "(DEBUG) L10N Directory: ${L10N_DIR}"
         
-        # Set an environment variable 
+        # Set L10N_DIR as an environment variable 
+        # Ref: https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-environment-variable
         echo "L10N_DIR=${L10N_DIR}" >> $GITHUB_ENV
     
     - name: Checkout 
