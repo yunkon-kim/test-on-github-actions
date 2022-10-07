@@ -29,17 +29,20 @@ jobs:
       shell: bash
       run: |
         L10N_BRANCH="${{github.base_ref}}"
-        case 
-        ${L10N_BRANCH}
-        in
-          dev-ko)
+        echo "(DEBUG) Branch: ${L10N_BRANCH}"
+        
+        case "${L10N_BRANCH}" in
+          dev-ko)          
           L10N_DIR="./content/ko/"
+          echo "(DEBUG) Directory: ${L10N_DIR}"
           ;;
           
           #dev-ko)
           #L10N_DIR="./content/ko/"
-          #;;          
+          #;;
         esac
+        
+        echo "(DEBUG) Directory: ${L10N_DIR}"
     
     - name: Checkout 
       uses: actions/checkout@v3
