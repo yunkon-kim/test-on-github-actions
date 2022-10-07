@@ -1,4 +1,4 @@
-name: Post outdated checkering result
+name: Post outdated checking result
 
 on:
   workflow_run:
@@ -7,15 +7,14 @@ on:
       - completed           
       
 jobs:
-  post-result:
+  post-outdated-report:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     permissions:
       issues: write 
 #       pull-requests: write      
-
-    env:
-      ARTIFACT_DIR: ./dev-ko-outdated-checking-result/ # It will be updated.
 
     steps:    
     - name: Show the github context
@@ -57,44 +56,44 @@ jobs:
     - name: Display structure of downloaded files
       run: tree
         
-    - name: Generate a result markdown
+    - name: Generate a report markdown
       shell: bash
       run: |
-        FILE_LIST=$(find ${ARTIFACT_DIR} -name '*.md')
+        FILE_LIST=$(find ./ -name '*.md')
         
         # Create checking_result.md
-        touch output.md
+        touch report.md
         
         # Generate markdown
-        echo "### Outdated files" >> output.md
+        echo "### Outdated files" >> report.md
         
         for FILE in ${FILE_LIST}; do 
           FILE_NAME="${FILE#${ARTIFACT_DIR}}" 
-          echo "- ${FILE_NAME}" >> output.md
+          echo "- ${FILE_NAME}" >> report.md
         done 
         
-        echo "" >> output.md
+        echo "" >> report.md
         
-        echo "### More details" >> output.md
+        echo "### More details" >> report.md
         
         for FILE in ${FILE_LIST}; do 
           FILE_NAME="${FILE#${ARTIFACT_DIR}}" 
         
-          echo "File: ${FILE_NAME}" >> output.md
-          echo "" >> output.md
-          echo "\`\`\`diff" >> output.md 
-          cat ${FILE} >> output.md      
-          echo "\`\`\`" >> output.md 
+          echo "File: ${FILE_NAME}" >> report.md
+          echo "" >> report.md
+          echo "\`\`\`diff" >> report.md 
+          cat ${FILE} >> report.md      
+          echo "\`\`\`" >> report.md 
           
         done 
         
-        echo "The end of report"  >> output.md              
+        echo "The end of report"  >> report.md              
         
     - name: Create an issue from file    
       uses: peter-evans/create-issue-from-file@v4
       with:
         title: "[ko] A report to track update"
-        content-filepath: output.md
+        content-filepath: report.md
         labels: |
           outdated
           good first issue
