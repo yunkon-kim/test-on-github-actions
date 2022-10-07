@@ -34,7 +34,6 @@ jobs:
         case "${L10N_BRANCH}" in
           dev-ko)          
           L10N_DIR="./content/ko/"
-          echo "(DEBUG) Directory: ${L10N_DIR}"
           ;;
           
           #dev-ko)
@@ -66,6 +65,7 @@ jobs:
         echo "(DEBUG) github.ref: ${{github.ref}}"
         echo "(DEBUG) github.head_ref: ${{github.head_ref}}"
         echo "(DEBUG) github.base_ref: ${{github.base_ref}}"
+        echo "(DEBUG) L10_DIR: ${L10N_DIR}"
         #####################################################
         
         # Set the lastest branch name from 'GITHUB_REF' 
@@ -83,6 +83,7 @@ jobs:
                 
         # Check outdated only if there is a localized term
         # Loop files in a localization directory, which is ${L10N_DIR} (e.g., ./content/ko/)
+        echo "(DEBUG) Check outdated"
         for FILE_PATH in $(find ${L10N_DIR} -name '*.md'); do
             # ${MYVAR#pattern}: delete shortest match of pattern from the beginning
             FILE_NAME="${FILE_PATH#${L10N_DIR}}" 
