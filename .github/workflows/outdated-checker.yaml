@@ -24,6 +24,9 @@ jobs:
 #     permissions:
 #       issues: write
 
+    env:
+      L10N_DIR: ""
+
     steps:
     - name: Set L10N directory
       shell: bash
@@ -65,7 +68,7 @@ jobs:
         echo "(DEBUG) github.ref: ${{github.ref}}"
         echo "(DEBUG) github.head_ref: ${{github.head_ref}}"
         echo "(DEBUG) github.base_ref: ${{github.base_ref}}"
-        echo "(DEBUG) L10_DIR: ${L10N_DIR}"
+        echo "(DEBUG) L10N_DIR: ${L10N_DIR}"
         #####################################################
         
         # Set the lastest branch name from 'GITHUB_REF' 
