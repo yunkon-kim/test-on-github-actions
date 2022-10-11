@@ -25,7 +25,7 @@ jobs:
 #       issues: write
 
     steps:
-    - name: Set L10N directory
+    - name: Set L10N directory and code
       shell: bash
       run: |
         L10N_BRANCH="${{github.base_ref}}"
@@ -46,7 +46,7 @@ jobs:
         echo "(DEBUG) L10N Directory: ${L10N_DIR}"
         echo "(DEBUG) L10N Code: ${L10N_CODE}"
         
-        # Set L10N_DIR as an environment variable 
+        # Set L10N_DIR and L10N_CODE as environment variables
         # Ref: https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-environment-variable
         echo "L10N_DIR=${L10N_DIR}" >> $GITHUB_ENV
         echo "L10N_CODE=${L10N_CODE}" >> $GITHUB_ENV        
@@ -107,7 +107,7 @@ jobs:
         echo "(DEBUG) The outdated files"
         ls -al ./outdated
         
-    - name: Upload result
+    - name: Upload output
       uses: actions/upload-artifact@v3
       with:
         name: ${{ env.L10N_CODE }}-outdated-checking-result
