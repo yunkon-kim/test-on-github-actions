@@ -1,16 +1,19 @@
-name: Post outdated checking result
+# This workflow will post outdated terms report
+# by using data from previous workflows. 
+name: Post outdated terms report
 
 on:
   workflow_run:
-    workflows: ["Outdated checker"]
+    workflows: ["Check outdated terms"]
     types:
       - completed
       
 jobs:
   post-outdated-report:
+    name: Post outdated terms report
+    
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
     permissions:
       issues: write 
@@ -42,15 +45,15 @@ jobs:
         echo "(DEBUG) github.token: ${{ github.token }}"
         echo "(DEBUG) github.workflow: ${{ github.workflow }}"
         echo "(DEBUG) github.workspace: ${{ github.workspace }}"
-
+        
 #     NOTE - "actions/download-artifact" is not working for sharing data between workflows. 
-#     - name: Download result
+#     - name: Download output
 #       uses: actions/download-artifact@v3
     - name: Download output
       uses: dawidd6/action-download-artifact@v2
       with:
         github_token: ${{secrets.GITHUB_TOKEN}}
-        workflow: outdated-checker.yaml
+        workflow: check-outdated-terms.yaml
         workflow_conclusion: success
         
     - name: Set up environment variables from the output
