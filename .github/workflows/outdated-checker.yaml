@@ -6,7 +6,7 @@ on:
     paths:
       - 'content/en/**.md'
     branches:
-      - 'dev-ko' # add other branche or use wildcard 'dev-**'
+      - 'dev-ko' # add other branches or use wildcard 'dev-**'
 
 jobs:
   check-outdated:
@@ -14,23 +14,25 @@ jobs:
     
     # Condition to run this workflow on the upstream repository
     #if: github.repository == 'cncf/glossary'
-
-    # Condition to update the old dev-xx from the latest dev-xx or main
-    # NOTE - In this workflow, "github.base_ref" refers to the old upstream/dev-xx.
-    # NOTE - In this workflow, "github.head_ref" refers to the latest forked/dev-xx or the latest upstream/main.
-    #if: ${{ contains('dev-ko main', github.head_ref) }}
     
     runs-on: ubuntu-latest
-#     permissions:
-#       issues: write
+    # permissions:
+    #   issues: write
+
+
+    # NOTE - In this workflow, "github.base_ref" refers to the old upstream/dev-xx.
+    # NOTE - In this workflow, "github.head_ref" refers to the latest forked/dev-xx or the latest upstream/main.
 
     steps:
-    - name: Set L10N directory and code
+    - name: Set up environment variables for the target L10n team
       shell: bash
       run: |
+        
+        # Set L10n branch
         L10N_BRANCH="${{github.base_ref}}"
         echo "(DEBUG) L10N Branch: ${L10N_BRANCH}"
         
+        # Set L10n directory and code
         case "${L10N_BRANCH}" in
           dev-ko)          
           L10N_DIR="./content/ko/"
@@ -60,7 +62,7 @@ jobs:
       id: checker
       shell: bash
       run: |
-        # (DEBUG) ###########################################
+        ##### DEBUG section, this will be removed later ###########
         ls -al
         git status
         git branch
@@ -77,19 +79,19 @@ jobs:
         echo "(DEBUG) L10N_DIR: ${{ env.L10N_DIR }}"
         #####################################################
         
-        # Set the lastest branch name from 'GITHUB_REF' 
-        # The latest branch can be 'upstream/main' or 'forked/dev-ko' (reabsed)
+        # Get the lastest branch name from 'GITHUB_REF' 
+        # The latest branch can be 'upstream/main' or 'forked/dev-ko' (rebased)
         LATEST_BRANCH=${GITHUB_REF#refs/}
         echo "(DUBUG) LATEST_BRANCH: ${LATEST_BRANCH}"
         
-        # Set the old branch from 'github.base_ref' 
+        # Get the old branch from 'github.base_ref' 
         # The old branch can be 'upstream/dev-ko'
         OLD_BRANCH="origin/${{github.base_ref}}"
         echo "(DUBUG) OLD_BRANCH: ${OLD_BRANCH}"
         
         # Make an output directory
         mkdir outdated
-                
+        
         # Check outdated only if there is a localized term
         # Loop files in a localization directory, which is ${L10N_DIR} (e.g., ./content/ko/)
         echo "(DEBUG) Check outdated"
