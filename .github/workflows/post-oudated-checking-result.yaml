@@ -4,7 +4,7 @@ on:
   workflow_run:
     workflows: ["Outdated checker"]
     types:
-      - completed           
+      - completed
       
 jobs:
   post-outdated-report:
@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       issues: write 
-#       pull-requests: write      
+#       pull-requests: write
 
     steps:    
     - name: Show the github context
@@ -53,15 +53,40 @@ jobs:
         workflow: outdated-checker.yaml
         workflow_conclusion: success
         
-    - name: Display structure of downloaded files
-      run: tree
-        
-    - name: Generate a report markdown
+    - name: Parse and check output
       shell: bash
       run: |
-        FILE_LIST=$(find ./ -name '*.md')
+        echo "(DEBUG) Display files and directories"
+        tree
         
-        # Create checking_result.md
+        # Set the last changed directory as the output directory
+        OUTPUT_DIR=$(ls -tp | head -1)
+        
+        # Extract L10N code from the directory name
+        # ${MYVAR%%-*}: retain the part before the first -
+        L10N_CODE=${OUTPUT_DIR%%-*}
+        
+        # Count outdated terms 
+        OUTDATED_TERMS_COUNT=$(ls $OUTPUT_DIR | wc -l)
+        
+        # DEBUG message
+        echo "(DEBUG) OUTPUT_DIR: ${OUTPUT_DIR}"
+        echo "(DEBUG) L10N_CODE: ${L10N_CODE}"
+        echo "(DEBUG) OUTDATED_TERMS_COUNT: ${OUTDATED_TERMS_COUNT}"
+        
+        # Set OUTPUT_DIR, L10N_CODE, and OUTDATED_TERMS_COUNT as environment variables
+        # Ref: https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-environment-variable
+        echo "OUTPUT_DIR=${OUTPUT_DIR}" >> $GITHUB_ENV
+        echo "L10N_CODE=${L10N_CODE}" >> $GITHUB_ENV
+        echo "OUTDATED_TERMS_COUNT=${OUTDATED_TERMS_COUNT}" >> $GITHUB_ENV
+        
+    - name: Generate a report markdown
+      if: ${{ env.OUTDATED_TERMS_COUNT > 0 }}
+      shell: bash
+      run: |
+        FILE_LIST=$(find ${OUTPUT_DIR} -name '*.md')
+        
+        # Create report.md
         touch report.md
         
         # Generate markdown
@@ -87,14 +112,14 @@ jobs:
           
         done 
         
-        echo "The end of report"  >> report.md              
+        echo "The end of report"  >> report.md
         
-    - name: Create an issue from file    
+    - name: Create an issue from file
       uses: peter-evans/create-issue-from-file@v4
       with:
-        title: "[ko] A report to track update"
+        title: "[${{ env.L10N_CODE }}] A report to track update"
         content-filepath: report.md
         labels: |
           outdated
           good first issue
-          lang/ko
+          lang/${{ env.L10N_CODE }}
