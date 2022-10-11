@@ -34,18 +34,22 @@ jobs:
         case "${L10N_BRANCH}" in
           dev-ko)          
           L10N_DIR="./content/ko/"
+          L10N_CODE="ko"
           ;;
           
-          #dev-ko)
-          #L10N_DIR="./content/ko/"
+          #dev-pt)
+          #L10N_DIR="./content/pt-br/"
+          #L10N_CODE="pt"
           #;;
         esac
         
         echo "(DEBUG) L10N Directory: ${L10N_DIR}"
+        echo "(DEBUG) L10N Code: ${L10N_CODE}"
         
         # Set L10N_DIR as an environment variable 
         # Ref: https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-environment-variable
         echo "L10N_DIR=${L10N_DIR}" >> $GITHUB_ENV
+        echo "L10N_CODE=${L10N_CODE}" >> $GITHUB_ENV        
     
     - name: Checkout 
       uses: actions/checkout@v3
@@ -106,7 +110,7 @@ jobs:
     - name: Upload result
       uses: actions/upload-artifact@v3
       with:
-        name: dev-ko-outdated-checking-result
+        name: ${{ env.L10N_CODE }}-outdated-checking-result
         path: ./outdated/
 
 #     - name: Create an issue from file    
