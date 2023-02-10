@@ -129,7 +129,7 @@ jobs:
                 mv temp.diff ${OUTPUT_DIR}/${FILE_PATH}
               fi
 
-            elif
+            else
               echo "(DEBUG) ${FILE_PATH} dose not exist."
               # File dose not exist (e.g, changed, renamed or removed)
               echo "Could not find ${FILE_PATH} in content/en/" > ${OUTPUT_DIR}/${FILE_PATH}
