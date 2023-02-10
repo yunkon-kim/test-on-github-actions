@@ -127,6 +127,7 @@ jobs:
               # if changed (temp.diff is NOT EMPTY.)
               if [ ! -s temp.diff]
                 mv temp.diff ${OUTPUT_DIR}/${FILE_PATH}
+              fi
 
             else
               # File dose not exist (e.g, changed, renamed or removed)
