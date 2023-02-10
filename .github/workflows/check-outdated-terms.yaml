@@ -121,7 +121,13 @@ jobs:
             # Actually compare between the old and lastest English terms and log diff in the file
             if [[ -f "./content/en/${FILE_PATH}" ]]; then
               # File exists
-              git diff ${OLD_BRANCH}..${LATEST_BRANCH} -- ./content/en/${FILE_PATH} > ${OUTPUT_DIR}/${FILE_PATH}
+              # Check changes
+              git diff ${OLD_BRANCH}..${LATEST_BRANCH} -- ./content/en/${FILE_PATH} > temp.diff
+
+              # if changed (temp.diff is NOT EMPTY.)
+              if [ ! -s temp.diff]
+                mv temp.diff ${OUTPUT_DIR}/${FILE_PATH}
+
             else
               # File dose not exist (e.g, changed, renamed or removed)
               echo "Could not find ${FILE_PATH} in content/en/" > ${OUTPUT_DIR}/${FILE_PATH}
