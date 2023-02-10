@@ -29,8 +29,16 @@ for L10N_FILE_PATH in $(find ${L10N_DIR} -name '*.md'); do
     # Actually compare between the old and lastest English terms and log diff in the file
     if [[ -f "./content/en/${FILE_PATH}" ]]; then
         # File exists
-        git diff ${OLD_BRANCH}..${LATEST_BRANCH} -- ./content/en/${FILE_PATH} > ./outdated/${FILE_PATH}
+        git diff ${OLD_BRANCH}..${LATEST_BRANCH} -- ./content/en/${FILE_PATH} > temp.diff
+
+	# if changed (temp.diff is NOT EMPTY.)
+        if [[ -s "temp.diff" ]]; then
+            echo "(DEBUG) ${FILE_PATH} is outdated."
+            mv temp.diff ./outdated/${FILE_PATH}
+        fi
+
     else
+        echo "(DEBUG) ${FILE_PATH} dose not exist."
         # File dose not exist (e.g, changed, renamed or removed)
         echo "Could not find ${FILE_PATH} in content/en/" > ./outdated/${FILE_PATH}
         echo "Need to check if it has been changed, renamed or removed" >> ./outdated/${FILE_PATH}
