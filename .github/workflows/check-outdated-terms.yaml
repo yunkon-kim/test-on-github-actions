@@ -3,21 +3,26 @@
 name: Check outdated terms
 on: 
   pull_request:
-    paths:
-      - 'content/en/**.md'
     branches:
       - 'dev-ko' # add other branches or use wildcard 'dev-**'
+    paths:
+      - 'content/en/**.md'
 
 jobs:
   check-outdated-terms:
     name: Check outdated terms
-    
+
+    # if: contains(fromJSON('["dev-ko", "dev-xx"]'), github.base_ref)
+    # Ref: https://docs.github.com/en/actions/learn-github-actions/expressions
+
+    if: github.base_ref == 'dev-ko'
+
     # Condition to run this workflow on the upstream repository
     #if: github.repository == 'cncf/glossary'
     
     runs-on: ubuntu-latest
     # permissions:
-    #   issues: write
+    #   issues: write    
     
     # NOTE - In this workflow, "github.base_ref" refers to the old upstream/dev-xx.
     # NOTE - In this workflow, "github.head_ref" refers to the latest forked/dev-xx or the latest upstream/main.
