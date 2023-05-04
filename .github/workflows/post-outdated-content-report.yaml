@@ -59,8 +59,8 @@ jobs:
     - name: Set up environment variables from the output
       shell: bash
       run: |
-        # echo "(DEBUG) Install 'jq' to read json"
-        # sudo apt-get install -y jq
+        echo "(DEBUG) Install 'jq' to read json"
+        sudo apt-get install -y jq
 
         echo "(DEBUG) Display files and directories"
         tree
