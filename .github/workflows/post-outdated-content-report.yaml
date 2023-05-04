@@ -111,8 +111,8 @@ jobs:
           FILE_NAME="${FILE#${OUTPUT_DIR}}" 
 
           echo "- [ ] ${FILE_NAME}" >> report.md
-          echo "- en: https://github.com/cncf/glossary/blob/main/content/en/${FILE_NAME}" >> report.md
-          echo "- ${{ env.L10N_CODE }}: https://github.com/cncf/glossary/blob/dev-${{ env.L10N_CODE }}/content/en/${FILE_NAME}" >> report.md
+          echo "- en: https://github.com/${{ github.repository }}/blob/main/content/en/${FILE_NAME}" >> report.md
+          echo "- ${{ env.L10N_CODE }}: https://github.com/${{ github.repository }}/blob/dev-${{ env.L10N_CODE }}/content/en/${FILE_NAME}" >> report.md
           echo "" >> report.md
 
           # The collapsible section is applied to improve the readability of the report. 
@@ -121,6 +121,7 @@ jobs:
           if [[ "$LINES" -gt "20" ]]; then
             echo "<details>" >> report.md
             echo "<summary><b>Diff in detail</b></summary>" >> report.md
+            echo "" >> report.md
             echo "\`\`\`diff" >> report.md 
             cat ${FILE} >> report.md      
             echo "\`\`\`" >> report.md 
