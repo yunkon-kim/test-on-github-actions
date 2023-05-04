@@ -41,12 +41,12 @@ jobs:
         # Set L10n directory and code
         case "${L10N_BRANCH}" in
           dev-ko)          
-          L10N_DIR="./content/ko/"
+          L10N_DIR="content/ko/"
           L10N_CODE="ko"
           ;;
           
           #dev-pt)
-          #L10N_DIR="./content/pt-br/"
+          #L10N_DIR="content/pt-br/"
           #L10N_CODE="pt"
           #;;
         esac
@@ -104,7 +104,7 @@ jobs:
         fi
         
         # Check outdated only if a localized content exists
-        # Loop files in a localization directory, which is ${L10N_DIR} (e.g., ./content/ko/)
+        # Loop files in a localization directory, which is ${L10N_DIR} (e.g., content/ko/)
         echo "(DEBUG) Check outdated"
         for L10N_FILE_PATH in $(find ${L10N_DIR} -name '*.md'); do
             echo "(DEBUG) L10N_FILE_PATH: ${L10N_FILE_PATH}"      
