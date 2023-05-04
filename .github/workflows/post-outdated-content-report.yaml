@@ -59,8 +59,8 @@ jobs:
     - name: Set up environment variables from the output
       shell: bash
       run: |
-        echo "(DEBUG) Install 'jq' to read json"
-        sudo apt-get install -y jq
+        # echo "(DEBUG) Install 'jq' to read json"
+        # sudo apt-get install -y jq
 
         echo "(DEBUG) Display files and directories"
         tree
@@ -69,8 +69,8 @@ jobs:
         OUTPUT_DIR=$(ls -tp | head -1)
         
         # Read L10N_DIR and L10N_CODE from L10N_INFO.json
-        L10N_DIR=$(cat L10N_INFO.json | jq '.L10N_DIR')
-        L10N_CODE=$(cat L10N_INFO.json | jq '.L10N_CODE')
+        L10N_DIR=$(cat ${OUTPUT_DIR}/L10N_INFO.json | jq '.L10N_DIR')
+        L10N_CODE=$(cat ${OUTPUT_DIR}/L10N_INFO.json | jq '.L10N_CODE')
         
         # Count outdated content
         OUTDATED_CONTENT_COUNT=$(ls $OUTPUT_DIR | wc -l)
