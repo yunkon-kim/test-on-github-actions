@@ -99,7 +99,7 @@ jobs:
         L10N_INFO_JSON=$(cat <<EOF
         {
           "L10N_DIR": "${L10N_DIR}",
-          "L10N_CODE": "${L10N_CODR}"
+          "L10N_CODE": "${L10N_CODE}"
         }
         EOF
         )
