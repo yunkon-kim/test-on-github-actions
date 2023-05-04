@@ -69,8 +69,8 @@ jobs:
         OUTPUT_DIR=$(ls -tp | head -1)
         
         # Read L10N_DIR and L10N_CODE from L10N_INFO.json
-        L10N_DIR=$(cat ${OUTPUT_DIR}/L10N_INFO.json | jq '.L10N_DIR')
-        L10N_CODE=$(cat ${OUTPUT_DIR}/L10N_INFO.json | jq '.L10N_CODE')
+        L10N_DIR=$(jq -r '.L10N_DIR' < ${OUTPUT_DIR}/L10N_INFO.json)
+        L10N_CODE=$(jq -r '.L10N_CODE' < ${OUTPUT_DIR}/L10N_INFO.json)
         
         # Count outdated content
         OUTDATED_CONTENT_COUNT=$(ls $OUTPUT_DIR | wc -l)
