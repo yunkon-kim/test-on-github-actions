@@ -59,26 +59,31 @@ jobs:
     - name: Set up environment variables from the output
       shell: bash
       run: |
+        echo "(DEBUG) Install 'jq' to read json"
+        sudo apt-get install -y jq
+
         echo "(DEBUG) Display files and directories"
         tree
         
         # Set the last changed directory as the output directory
         OUTPUT_DIR=$(ls -tp | head -1)
         
-        # Extract L10N code from the directory name
-        # ${MYVAR%%-*}: retain the part before the first '-'
-        L10N_CODE=${OUTPUT_DIR%%-*}
+        # Read L10N_DIR and L10N_CODE from L10N_INFO.json
+        L10N_DIR=$(cat L10N_INFO.json | jq '.L10N_DIR')
+        L10N_CODE=$(cat L10N_INFO.json | jq '.L10N_CODE')
         
         # Count outdated content
         OUTDATED_CONTENT_COUNT=$(ls $OUTPUT_DIR | wc -l)
         
         echo "(DEBUG) OUTPUT_DIR: ${OUTPUT_DIR}"
+        echo "(DEBUG) L10N_DIR: ${L10N_DIR}"
         echo "(DEBUG) L10N_CODE: ${L10N_CODE}"
         echo "(DEBUG) OUTDATED_CONTENT_COUNT: ${OUTDATED_CONTENT_COUNT}"
         
-        # Set OUTPUT_DIR, L10N_CODE, and OUTDATED_CONTENT_COUNT as environment variables
+        # Set OUTPUT_DIR, L10N_DIR, L10N_CODE, and OUTDATED_CONTENT_COUNT as environment variables
         # Ref: https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-environment-variable
         echo "OUTPUT_DIR=${OUTPUT_DIR}" >> $GITHUB_ENV
+        echo "L10N_DIR=${L10N_DIR}" >> $GITHUB_ENV
         echo "L10N_CODE=${L10N_CODE}" >> $GITHUB_ENV
         echo "OUTDATED_CONTENT_COUNT=${OUTDATED_CONTENT_COUNT}" >> $GITHUB_ENV
         
@@ -136,7 +141,7 @@ jobs:
         
         done 
         
-        echo "The end of report"  >> report.md
+        echo "The end of report" >> report.md
         
     - name: Create an issue from the report
       uses: peter-evans/create-issue-from-file@v4
