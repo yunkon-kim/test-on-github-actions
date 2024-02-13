@@ -37,7 +37,7 @@ jobs:
           # Get changed files in the PR
           files=$(git diff --name-only ${BASE_BRANCH}..${PR_BRANCH} | grep '\.go$')
 
-          echo "(DEBUG) ${files}"
+          echo "(DEBUG) files: ${files}"
 
           # Process each changed file
           for file in $files; do
@@ -52,7 +52,7 @@ jobs:
                       echo "Line $line_num: \`$content\`" >> $output
                       found_korean=true
                   fi
-              done < <(git diff ${{ github.base_ref }} $file | grep -n "^+" | cut -c2-)
+              done < <(git diff ${BASE_BRANCH} $file | grep -n "^+" | cut -c2-)
 
               if [ "$found_korean" = false ]; then
                   echo "No Korean characters found in quotes." >> $output
