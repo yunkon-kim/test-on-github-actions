@@ -19,13 +19,15 @@ jobs:
           git branch
           
           # Default environment variables 
-          echo "GITHUB_REF: $GITHUB_REF"
+          BASE_BRANCH="origin/${{github.base_ref}}"  # origin/main
+          PR_BRANCH=${GITHUB_REF#refs/}              # pull/xx/merge
+          echo "Base branch: ${BASE_BRANCH}"
           echo "Extract branch: ${GITHUB_REF#refs/}"
-          
+                    
           # `github` context information
-          echo "(DEBUG) Github.ref: ${{github.ref}}"
+          echo "(DEBUG) github.ref: ${{github.ref}}"
           echo "(DEBUG) github.head_ref: ${{github.head_ref}}"
-          echo "(DEBUG) Github.base_ref: ${{github.base_ref}}"
+          echo "(DEBUG) github.base_ref: ${{github.base_ref}}"
           #####################################################
           # Initialize Markdown file
           output="korean_check_results.md"
@@ -33,7 +35,7 @@ jobs:
           echo "" >> $output
 
           # Get changed files in the PR
-          files=$(git diff --name-only ${{ github.base_ref }}..${{ github.head_ref }} | grep '\.go$')
+          files=$(git diff --name-only ${BASE_BRANCH}..${PR_BRANCH} | grep '\.go$')
 
           echo "(DEBUG) ${files}"
 
