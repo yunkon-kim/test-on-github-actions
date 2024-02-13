@@ -1,6 +1,11 @@
-name: Check Korean Characters in Quotes
+name: Check Korean Characters
 
-on: pull_request
+on: 
+  pull_request:
+    branches:
+      - 'main'
+    paths:
+      - '**.go'
 
 jobs:
   check-korean:
@@ -30,43 +35,65 @@ jobs:
           echo "(DEBUG) github.base_ref: ${{github.base_ref}}"
           #####################################################
           
-          # Initialize Markdown file
-          output="korean_check_results.md"
-          echo "# Korean Characters Check Result" > $output
-          echo "" >> $output
-
           # Get changed files in the PR
           files=$(git diff --name-only ${BASE_BRANCH}...${PR_BRANCH} | grep '\.go$')
-
+          
+          # Create a temp file
+          temp_output="temp.md"
+          echo "" > $temp_output
+          
           # Process each changed file
-          for file in $files; do
+          for file in $files; do              
               found_korean=false
-              lines_output=""
-
-              # Extract changed lines and check for Korean characters in quotes
-              git diff ${BASE_BRANCH}...${PR_BRANCH} -- $file | grep "^+" | while IFS= read -r line; do
-                  if [[ $line =~ \"+([^\"]*[\uAC00-\uD7A3]+[^\"]*)\"+ ]]; then
-                      if [ "$found_korean" = false ]; then
-                          found_korean=true
-                          lines_output+="## File: $file\n"
-                      fi
-                      line_content=$(echo "$line" | sed -e 's/^[+]\s*//')
-                      lines_output+="Line: \`$line_content\`\n"
-                  fi
-              done
-
-              # Write to output if Korean characters found
-              if [ "$found_korean" = true ]; then
-                  echo -e "$lines_output" >> $output
-                  echo "" >> $output
-              fi
+          
+              # Extract changed lines
+              changed_lines=$(git diff ${BASE_BRANCH}...${PR_BRANCH} -- $file | grep "^+")
+              echo "(DEBUG)"
+              echo "$changed_lines"
+              
+              # Check Korean characters wrapped in quote (" ")
+              korean_lines=$(echo "$changed_lines" | grep -n -P "\"([^\"]*[\x{AC00}-\x{D7A3}]+[^\"]*)\"")
+              # Check all Korean characters, such as Korean wrapped in quote, included in comments, and so on.
+              # korean_lines=$(echo "$changed_lines" | grep -n -P "[\x{AC00}-\x{D7A3}]")
+              echo "(DEBUG)"
+              echo "$korean_lines"
+          
+              if [ -n "$korean_lines" ]; then
+                  echo "**$file**" >> $temp_output
+                  echo "\`\`\`diff" >> $temp_output
+                  echo "$korean_lines" | sed -e 's/^[+]\s*//' >> $temp_output
+                  echo "\`\`\`" >> $temp_output
+                  echo "" >> $temp_output
+              fi          
           done
-
+          
+          if [ -s "$temp_output" ]; then
+              output="korean_check_results.md"
+              echo "# Korean Characters Check Result" > $output
+              cat "$temp_output" >> "$output"
+          fi
+          
           # Display output path
-          echo "Results saved in $output"
+          echo "[(Debug) Results saved in $output]"
+          cat "$output"
 
-      - name: Upload result as artifact
-        uses: actions/upload-artifact@v4
+      # - name: Upload result as artifact
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: korean-check-results
+      #     path: korean_check_results.md
+
+      - name: Comment PR with results
+        uses: actions/github-script@v5
         with:
-          name: korean-check-results
-          path: korean_check_results.md
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            const results = fs.readFileSync(path.join(process.env.GITHUB_WORKSPACE, 'korean_check_results.md'), 'utf8');
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: results
+            });
