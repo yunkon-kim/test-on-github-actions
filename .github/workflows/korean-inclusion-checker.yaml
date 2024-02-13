@@ -13,53 +13,46 @@ jobs:
 
       - name: Check for Korean characters in quotes
         run: |
-          ##### DEBUG section, this will be removed later ###########
-          ls -al
-          git status
-          git branch
-          
-          # Default environment variables 
-          BASE_BRANCH="origin/${{github.base_ref}}"  # origin/main
-          PR_BRANCH=${GITHUB_REF#refs/}              # pull/xx/merge
+          # Set base and head branches
+          BASE_BRANCH="origin/${{ github.base_ref }}"
+          HEAD_BRANCH="origin/${{ github.head_ref }}"
           echo "Base branch: ${BASE_BRANCH}"
-          echo "Extract branch: ${GITHUB_REF#refs/}"
-                    
-          # `github` context information
-          echo "(DEBUG) github.ref: ${{github.ref}}"
-          echo "(DEBUG) github.head_ref: ${{github.head_ref}}"
-          echo "(DEBUG) github.base_ref: ${{github.base_ref}}"
-          #####################################################
+          echo "Head branch: ${HEAD_BRANCH}"
+
           # Initialize Markdown file
           output="korean_check_results.md"
           echo "# Korean Characters Check Result" > $output
           echo "" >> $output
 
           # Get changed files in the PR
-          files=$(git diff --name-only ${BASE_BRANCH}..${PR_BRANCH} | grep '\.go$')
-
-          echo "(DEBUG) files: ${files}"
+          files=$(git diff --name-only ${BASE_BRANCH}...${HEAD_BRANCH} | grep '\.go$')
 
           # Process each changed file
           for file in $files; do
               found_korean=false
-          
+              lines_output=""
+
               # Extract changed lines and check for Korean characters in quotes
-              while IFS= read -r line; do
-                  if [[ $line =~ \"([^\"]*[\uAC00-\uD7A3]+[^\"]*)\" ]]; then
+              git diff ${BASE_BRANCH}...${HEAD_BRANCH} -- $file | grep "^+" | while IFS= read -r line; do
+                  if [[ $line =~ \"+([^\"]*[\uAC00-\uD7A3]+[^\"]*)\"+ ]]; then
                       if [ "$found_korean" = false ]; then
-                          echo "## File: $file" >> $output
                           found_korean=true
+                          lines_output+="## File: $file\n"
                       fi
-                      line_num=$(echo "$line" | cut -d':' -f1)
-                      content=$(echo "$line" | cut -d':' -f2-)
-                      echo "Line $line_num: \`$content\`" >> $output
+                      line_content=$(echo "$line" | sed -e 's/^[+]\s*//')
+                      lines_output+="Line: \`$line_content\`\n"
                   fi
-              done < <(git diff ${BASE_BRANCH} $file | grep -n "^+" | cut -c2-)
-          
+              done
+
+              # Write to output if Korean characters found
               if [ "$found_korean" = true ]; then
+                  echo -e "$lines_output" >> $output
                   echo "" >> $output
               fi
           done
+
+          # Display output path
+          echo "Results saved in $output"
 
       - name: Upload result as artifact
         uses: actions/upload-artifact@v4
