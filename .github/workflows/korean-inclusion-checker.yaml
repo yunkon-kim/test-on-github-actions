@@ -11,11 +11,22 @@ jobs:
         with:
           fetch-depth: 0 # Fetch all history for all branches and tags
 
-      - name: Fetch base branch
-        run: git fetch origin ${{ github.base_ref }}:${{ github.base_ref }}
-
       - name: Check for Korean characters in quotes
         run: |
+          ##### DEBUG section, this will be removed later ###########
+          ls -al
+          git status
+          git branch
+          
+          # Default environment variables 
+          echo "GITHUB_REF: $GITHUB_REF"
+          echo "Extract branch: ${GITHUB_REF#refs/}"
+          
+          # `github` context information
+          echo "(DEBUG) Github.ref: ${{github.ref}}"
+          echo "(DEBUG) github.head_ref: ${{github.head_ref}}"
+          echo "(DEBUG) Github.base_ref: ${{github.base_ref}}"
+          #####################################################
           # Initialize Markdown file
           output="korean_check_results.md"
           echo "# Korean Characters Check Result" > $output
