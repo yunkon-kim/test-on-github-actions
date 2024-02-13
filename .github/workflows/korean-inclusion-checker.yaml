@@ -1,0 +1,50 @@
+name: Check Korean Characters in Quotes
+
+on: pull_request
+
+jobs:
+  check-korean:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - name: Check for Korean characters in quotes
+        run: |
+          # Initialize Markdown file
+          output="korean_check_results.md"
+          echo "# Korean Characters Check Result" > $output
+          echo "" >> $output
+
+          # Get changed files in the PR
+          files=$(git diff --name-only ${{ github.base_ref }}...${{ github.head_ref }} | grep '\.go$')
+
+          # Process each changed file
+          for file in $files; do
+              echo "## File: $file" >> $output
+              found_korean=false
+
+              # Extract changed lines and their numbers
+              while IFS= read -r line; do
+                  line_num=$(echo "$line" | cut -d':' -f1)
+                  content=$(echo "$line" | cut -d':' -f2-)
+                  if [[ $content =~ \"([^\"]*[\uAC00-\uD7A3]+[^\"]*)\" ]]; then
+                      echo "Line $line_num: \`$content\`" >> $output
+                      found_korean=true
+                  fi
+              done < <(git diff ${{ github.base_ref }} $file | grep -n "^+" | cut -c2-)
+
+              if [ "$found_korean" = false ]; then
+                  echo "No Korean characters found in quotes." >> $output
+              fi
+              echo "" >> $output
+          done
+
+          # Display output path
+          echo "Results saved in $output"
+      
+      - name: Upload result as artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: korean-check-results
+          path: korean_check_results.md
