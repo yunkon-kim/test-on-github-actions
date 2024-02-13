@@ -1,5 +1,4 @@
-name: Check Korean Characters
-
+name: Korean checker
 on: 
   pull_request:
     branches:
@@ -8,7 +7,7 @@ on:
       - '**.go'
 
 jobs:
-  check-korean:
+  check-if-Korean-is-included:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -69,7 +68,9 @@ jobs:
           
           if [ -s "$temp_output" ]; then
               output="korean_check_results.md"
-              echo "# Korean Characters Check Result" > $output
+              echo "## Result to check if Korean is included" > $output
+              echo "All output of print and log must be written in English :wink:" >> $output
+              echo "Please check and correct the followings" >> $output 
               cat "$temp_output" >> "$output"
           fi
           
