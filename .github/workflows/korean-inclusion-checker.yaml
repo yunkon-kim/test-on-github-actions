@@ -22,7 +22,9 @@ jobs:
           echo "" >> $output
 
           # Get changed files in the PR
-          files=$(git diff --name-only ${{ github.base_ref }} ${{ github.head_ref }} | grep '\.go$')
+          files=$(git diff --name-only ${{ github.base_ref }}..${{ github.head_ref }} | grep '\.go$')
+
+          echo "(DEBUG) ${files}"
 
           # Process each changed file
           for file in $files; do
