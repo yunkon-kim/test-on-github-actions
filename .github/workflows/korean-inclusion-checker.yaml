@@ -8,6 +8,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0 # Fetch all history for all branches and tags
+
+      - name: Fetch base branch
+        run: git fetch origin ${{ github.base_ref }}:${{ github.base_ref }}
 
       - name: Check for Korean characters in quotes
         run: |
@@ -17,7 +22,7 @@ jobs:
           echo "" >> $output
 
           # Get changed files in the PR
-          files=$(git diff --name-only ${{ github.base_ref }}...${{ github.head_ref }} | grep '\.go$')
+          files=$(git diff --name-only ${{ github.base_ref }} ${{ github.head_ref }} | grep '\.go$')
 
           # Process each changed file
           for file in $files; do
