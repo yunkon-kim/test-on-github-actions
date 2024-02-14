@@ -68,18 +68,24 @@ jobs:
               fi          
           done
 
-          # Trim to avoid malfunctioning by linefeed, space, etc.
-          trimmed_temp_outputs=$(cat "$temp_output" | xargs)
-          echo "(DEBUG) Trimmed temp_output:"
-          echo "$trimmed_temp_outputs"
-          
-          if [ -n "$trimmed_temp_outputs" ]; then
-              output="korean_check_results.md"
-              echo "## Result to check if Korean is included" > $output
-              echo "All output of print and log must be written in English :wink:" >> $output
-              echo "Please check and correct the followings" >> $output 
-              cat "$temp_output" >> "$output"
-              echo "KOREAN_EXISTS=true" >> $GITHUB_OUTPUT
+          # Check if the file exists
+          if [ -s "$temp_output" ]; then
+              # Trim
+              trimmed_temp_outputs=$(cat "$temp_output" | xargs)
+              echo "(DEBUG) Trimmed temp_output:"
+              echo "$trimmed_temp_outputs"
+              
+              if [ -n "$trimmed_temp_outputs" ]; then
+                  output="korean_check_results.md"
+                  echo "## Result to check if Korean is included" > $output
+                  echo "All output of print and log must be written in English :wink:" >> $output
+                  echo "Please check and correct the followings" >> $output 
+                  cat "$temp_output" >> "$output"
+                  echo "KOREAN_EXISTS=true" >> $GITHUB_OUTPUT
+              fi
+          else
+              echo "No Korean content detected."
+              echo "KOREAN_EXISTS=false" >> $GITHUB_OUTPUT
           fi
           
           # Display output path
