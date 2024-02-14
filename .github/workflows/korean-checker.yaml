@@ -35,12 +35,14 @@ jobs:
           echo "(DEBUG) github.head_ref: ${{github.head_ref}}"
           echo "(DEBUG) github.base_ref: ${{github.base_ref}}"
           #####################################################
+
+          temp_output="temp.md"
+          output="korean_check_results.md"
           
           # Get changed files in the PR
           files=$(git diff --name-only ${BASE_BRANCH}...${PR_BRANCH} | grep '\.go$')
           
           # Create a temp file
-          temp_output="temp.md"
           echo "" > $temp_output
           
           # Process each changed file
@@ -76,7 +78,6 @@ jobs:
               echo "$trimmed_temp_outputs"
               
               if [ -n "$trimmed_temp_outputs" ]; then
-                  output="korean_check_results.md"
                   echo "## Result to check if Korean is included" > $output
                   echo "All output of print and log must be written in English :wink:" >> $output
                   echo "Please check and correct the followings" >> $output 
@@ -88,9 +89,12 @@ jobs:
               echo "KOREAN_EXISTS=false" >> $GITHUB_OUTPUT
           fi
           
-          # Display output path
-          echo "[(Debug) Results saved in $output]"
-          cat "$output"
+          # # Check if the file exists
+          # if [ -s "$output" ]; then
+          #   # Display output path
+          #   echo "[(Debug) Results saved in $output]"
+          #   cat "$output"
+          # fi
 
       - name: Comment PR with results
         if: ${{ steps.check-korean.outputs.KOREAN_EXISTS }} == 'true'
