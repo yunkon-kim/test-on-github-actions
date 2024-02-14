@@ -98,7 +98,7 @@ jobs:
           # fi
 
       - name: Comment PR with results
-        if: steps.check-korean.outputs.KOREAN_EXISTS == true
+        if: steps.check-korean.outputs.KOREAN_EXISTS == "true"
         uses: actions/github-script@v7
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
@@ -119,7 +119,7 @@ jobs:
             }
 
       - name: Fail on Korean Content
-        if: steps.check-korean.outputs.KOREAN_EXISTS == true
+        if: steps.check-korean.outputs.KOREAN_EXISTS == "true"
         run: |
           echo "Korean content detected. Failing the workflow on purpose."
           exit 1
