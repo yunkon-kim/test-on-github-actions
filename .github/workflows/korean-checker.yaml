@@ -59,13 +59,7 @@ jobs:
               echo "(DEBUG) Korean lines in $file:"
               echo "$korean_lines"
 
-              # Trim to avoid malfunctioning by linefeed, space, etc.
-              trimmed_korean_lines=$(echo "$korean_lines" | xargs)
-              echo "(DEBUG) Korean lines in $file:"
-              echo "$trimmed_korean_lines"
-              
-              
-              if [ -n "$trimmed_korean_lines" ]; then
+              if [ -n "$korean_lines" ]; then
                   echo "**$file**" >> $temp_output
                   echo "\`\`\`diff" >> $temp_output
                   echo "$korean_lines" | sed -e 's/^[+]\s*//' >> $temp_output
@@ -73,8 +67,13 @@ jobs:
                   echo "" >> $temp_output
               fi          
           done
+
+          # Trim to avoid malfunctioning by linefeed, space, etc.
+          trimmed_temp_outputs=$(cat "$temp_output" | xargs)
+          echo "(DEBUG) Trimmed temp_output:"
+          echo "$trimmed_temp_outputs"
           
-          if [ -s "$temp_output" ]; then
+          if [ -n "$trimmed_temp_outputs" ]; then
               output="korean_check_results.md"
               echo "## Result to check if Korean is included" > $output
               echo "All output of print and log must be written in English :wink:" >> $output
