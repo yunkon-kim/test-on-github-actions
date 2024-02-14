@@ -16,6 +16,7 @@ jobs:
           fetch-depth: 0 # Fetch all history for all branches and tags
 
       - name: Check for Korean characters in quotes
+        id: check-korean
         run: |
           ##### DEBUG section, this will be removed later ###########
           ls -al
@@ -72,29 +73,36 @@ jobs:
               echo "All output of print and log must be written in English :wink:" >> $output
               echo "Please check and correct the followings" >> $output 
               cat "$temp_output" >> "$output"
+              echo "KOREAN_EXISTS=true" >> $GITHUB_OUTPUT
           fi
           
           # Display output path
           echo "[(Debug) Results saved in $output]"
           cat "$output"
 
-      # - name: Upload result as artifact
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: korean-check-results
-      #     path: korean_check_results.md
-
       - name: Comment PR with results
+        if: ${{ steps.check-korean.outputs.KOREAN_EXISTS }} == 'true'
         uses: actions/github-script@v5
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
             const fs = require('fs');
             const path = require('path');
-            const results = fs.readFileSync(path.join(process.env.GITHUB_WORKSPACE, 'korean_check_results.md'), 'utf8');
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: results
-            });
+            const resultsPath = path.join(process.env.GITHUB_WORKSPACE, 'korean_check_results.md');            
+            if (fs.existsSync(resultsPath)) {
+                const results = fs.readFileSync(resultsPath, 'utf8');
+                if (results.trim().length > 0) {
+                    github.rest.issues.createComment({
+                      issue_number: context.issue.number,
+                      owner: context.repo.owner,
+                      repo: context.repo.repo,
+                      body: results
+                    });
+                }
+            }
+
+      - name: Fail on Korean Content
+        if: ${{ steps.check-korean.outputs.KOREAN_EXISTS }} == 'true'
+        run: |
+          echo "Korean content detected. Failing the workflow on purpose."
+          exit 1
