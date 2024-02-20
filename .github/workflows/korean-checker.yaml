@@ -31,7 +31,7 @@ jobs:
           fi
           echo ${{ github.event.number }} > ${OUTPUT_DIR}/pr-number.txt
 
-      - name: Check for Korean characters in quotes
+      - name: Check Korean in quotes
         id: check-korean
         run: |
           set -x
@@ -64,7 +64,7 @@ jobs:
           # Process each changed file
           for file in $files; do              
             found_korean=false
-        
+
             # Extract changed lines
             changed_lines=$(git diff ${BASE_BRANCH}...${PR_BRANCH} -- $file | grep "^+")
             echo "(DEBUG) Changed lines in $file:"
@@ -85,7 +85,7 @@ jobs:
               echo "" >> $temp_output
             fi          
           done
-
+          
           # Check if the file exists
           if [ -s "$temp_output" ]; then
             # Trim
@@ -112,8 +112,8 @@ jobs:
           #   echo "[(Debug) Results saved in $output]"
           #   cat "$output"
           # fi
-
-      - name: Update Korean check results
+          
+      - name: Upload Korean check results
         if: steps.check-korean.outputs.KOREAN_EXISTS == 'true'
         uses: actions/upload-artifact@v4
         with:
