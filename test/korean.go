@@ -11,5 +11,5 @@ func main() {
 	log.Println("안녕하세요, 세계!")
 
 	// 주석
-	log.Println("헬로")
+	log.Println("Hi!")
 }
