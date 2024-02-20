@@ -55,7 +55,7 @@ jobs:
         echo "(DEBUG) github.workflow: ${{ github.workflow }}"
         echo "(DEBUG) github.workspace: ${{ github.workspace }}"
         
-    - name: Download output
+    - name: Download results
       uses: actions/download-artifact@v4
       with: 
         name: ${{ env.ARTIFACT_NAME }}
@@ -79,7 +79,7 @@ jobs:
           cat "${FILE_KOREAN_CHECKING_RESULT}" >> "$REPORT"
         else
           echo "(DEBUG) No Korean texts are detected."
-          
+
           echo "Good news! All print and log statements are in English, as per our guidelines. :blush: " > $REPORT
         fi
       
