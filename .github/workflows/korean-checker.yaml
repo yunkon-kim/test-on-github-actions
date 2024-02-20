@@ -54,7 +54,7 @@ jobs:
           #####################################################
           
           temp_output="temp.md"
-          OUTPUT="${OUTPUT_DIR}/{OUTPUT_FILE}"
+          OUTPUT="${OUTPUT_DIR}/${OUTPUT_FILE}"
           
           # Get changed files in the PR
           files=$(git diff --name-only ${BASE_BRANCH}...${PR_BRANCH} | grep '\.go$')
