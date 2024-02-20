@@ -59,6 +59,7 @@ jobs:
       with: 
         name: ${{ env.ARTIFACT_NAME }}
         github-token: ${{ secrets.GITHUB_TOKEN }}
+        run-id: ${{ github.event.workflow_run.id }}
     # - name: Download output
     #   uses: dawidd6/action-download-artifact@v3
     #   with:
