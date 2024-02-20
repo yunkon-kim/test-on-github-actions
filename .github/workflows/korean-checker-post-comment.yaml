@@ -6,7 +6,10 @@ on:
     workflows: ["Korean checker"]
     types:
       - completed
-      
+
+env:
+  ARTIFACT_NAME: pr
+
 jobs:
   make-comment-on-the-pr:
     name: Make a comment on the PR
@@ -54,8 +57,8 @@ jobs:
     - name: Download output
       uses: actions/download-artifact@v4
       with: 
-        name: Korean checker
-        github-token: ${{secrets.GITHUB_TOKEN}}
+        name: ${{ env.ARTIFACT_NAME }}
+        github-token: ${{ secrets.GITHUB_TOKEN }}
     # - name: Download output
     #   uses: dawidd6/action-download-artifact@v3
     #   with:
