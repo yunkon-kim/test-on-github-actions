@@ -55,7 +55,6 @@ jobs:
         echo "(DEBUG) github.workflow: ${{ github.workflow }}"
         echo "(DEBUG) github.workspace: ${{ github.workspace }}"
         
-#     NOTE - "actions/download-artifact" is not working for sharing data between workflows. 
     - name: Download output
       uses: actions/download-artifact@v4
       with: 
@@ -72,23 +71,16 @@ jobs:
       run: |
         REPORT="${FILE_REPORT}"
         if [ -s "${FILE_KOREAN_CHECKING_RESULT}" ]; then
-          # Trim
-          trimmed_results=$(cat "$FILE_KOREAN_CHECKING_RESULT" | xargs)
-          echo "(DEBUG) Trimmed ${FILE_KOREAN_CHECKING_RESULT}:"
-          echo "$trimmed_results"
-            
-          if [ -n "$trimmed_results" ]; then
-            echo "(DEBUG) Korean texts are detected."
+          echo "(DEBUG) Korean texts are detected."
 
-            echo "**Could you please check and revise Korean texts?**" > $REPORT
-            echo "Note - All output of print and log statements should be in English. :wink:" >> $REPORT
-            echo "" >> $REPORT
-            cat "${FILE_KOREAN_CHECKING_RESULT}" >> "$REPORT"
-          else
-            echo "(DEBUG) No Korean texts are detected."
-
-            echo "Good news! All print and log statements are in English, as per our guidelines. :blush: " > $REPORT
-          fi
+          echo "**Could you please check and revise Korean texts?**" > $REPORT
+          echo "Note - All output of print and log statements should be in English. :wink:" >> $REPORT
+          echo "" >> $REPORT
+          cat "${FILE_KOREAN_CHECKING_RESULT}" >> "$REPORT"
+        else
+          echo "(DEBUG) No Korean texts are detected."
+          
+          echo "Good news! All print and log statements are in English, as per our guidelines. :blush: " > $REPORT
         fi
       
     - name: Comment PR with results
