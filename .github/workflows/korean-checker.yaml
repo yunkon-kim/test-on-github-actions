@@ -10,7 +10,7 @@ on:
 
 # Environment variables
 env:
-  OUTPUT_DIR: "./pr"
+  OUTPUT_DIR: "./output"
 
 jobs:
   check-if-Korean-is-included:
@@ -29,7 +29,7 @@ jobs:
           elif [[ ! -d $OUTPUT_DIR ]]; then
               echo "$OUTPUT_DIR already exists but is not a directory" 1>&2
           fi
-          echo ${{ github.event.number }} > ./pr/NR
+          echo ${{ github.event.number }} > ${OUTPUT_DIR}/pr-number.txt
 
       - name: Check for Korean characters in quotes
         id: check-korean
@@ -53,7 +53,7 @@ jobs:
           #####################################################
 
           temp_output="temp.md"
-          output="${OUTPUT_DIR}/korean_check_results.md"
+          output="${OUTPUT_DIR}/korean-check-results.md"
           
           # Get changed files in the PR
           files=$(git diff --name-only ${BASE_BRANCH}...${PR_BRANCH} | grep '\.go$')
@@ -117,8 +117,8 @@ jobs:
         if: steps.check-korean.outputs.KOREAN_EXISTS == 'true'
         uses: actions/upload-artifact@v4
         with:
-          name: pr
-          path: pr/
+          name: results-to-check-korean
+          path: ${{ env.OUTPUT_DIR }}
 
       - name: Fail on Korean Content
         if: steps.check-korean.outputs.KOREAN_EXISTS == 'true'
